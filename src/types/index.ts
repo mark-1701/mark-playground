@@ -1,4 +1,4 @@
-export type MenuBarEditorState = {
+export type ToolbarState = {
   isBold: boolean;
   isItalic: boolean;
   isStrike: boolean;

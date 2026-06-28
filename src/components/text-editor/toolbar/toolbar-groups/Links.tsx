@@ -1,4 +1,4 @@
-import { MenuBarEditorState } from '@/types';
+import type { ToolbarState } from '@/types';
 import type { Editor } from '@tiptap/core';
 import { useCallback } from 'react';
 import { PiLink, PiLinkBreak } from 'react-icons/pi';
@@ -6,10 +6,10 @@ import ToolBarButton from '../ToolbarButton';
 
 const Links = ({
   editor,
-  editorState
+  toolbarState
 }: {
   editor: Editor;
-  editorState: MenuBarEditorState;
+  toolbarState: ToolbarState;
 }) => {
   const setLink = useCallback(() => {
     const previousUrl = editor.getAttributes('link').href;
@@ -40,11 +40,11 @@ const Links = ({
       </ToolBarButton>
       <ToolBarButton
         onClick={() => editor.chain().focus().unsetLink().run()}
-        disabled={!editorState.isLink}
+        disabled={!toolbarState.isLink}
       >
         <PiLinkBreak
           size={24}
-          className={editorState.isLink ? 'text-gray-700' : 'text-gray-300'}
+          className={toolbarState.isLink ? 'text-gray-700' : 'text-gray-300'}
         />
       </ToolBarButton>
     </>

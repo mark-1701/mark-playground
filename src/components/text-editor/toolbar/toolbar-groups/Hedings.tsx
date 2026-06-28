@@ -1,15 +1,20 @@
-import { MenuBarEditorState } from '@/types';
+import type { ToolbarState } from '@/types';
 import type { Editor } from '@tiptap/core';
+import type { Level } from '@tiptap/extension-heading';
 import { IoChevronDownOutline } from 'react-icons/io5';
 import { PiTextHOne } from 'react-icons/pi';
 import ToolBarButton from '../ToolbarButton';
 
+type ToolbarStateKeys = keyof ToolbarState;
+
+const headingLevels: Level[] = [1, 2, 3, 4, 5, 6];
+
 const Headings = ({
   editor,
-  editorState
+  toolbarState
 }: {
   editor: Editor;
-  editorState: MenuBarEditorState;
+  toolbarState: ToolbarState;
 }) => {
   return (
     <div className="group relative">
@@ -22,54 +27,17 @@ const Headings = ({
         className="invisible absolute top-full z-10 w-[80px] bg-white p-2
           shadow-lg group-hover:visible"
       >
-        <ToolBarButton
-          selected={editorState.isHeading1}
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 1 }).run()
-          }
-        >
-          Título 1
-        </ToolBarButton>
-        <ToolBarButton
-          selected={editorState.isHeading2}
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-        >
-          Título 2
-        </ToolBarButton>
-        <ToolBarButton
-          selected={editorState.isHeading3}
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
-        >
-          Título 3
-        </ToolBarButton>
-        <ToolBarButton
-          selected={editorState.isHeading4}
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 4 }).run()
-          }
-        >
-          Título 4
-        </ToolBarButton>
-        <ToolBarButton
-          selected={editorState.isHeading5}
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 5 }).run()
-          }
-        >
-          Título 5
-        </ToolBarButton>
-        <ToolBarButton
-          selected={editorState.isHeading6}
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 6 }).run()
-          }
-        >
-          Título 6
-        </ToolBarButton>
+        {headingLevels.map(level => (
+          <ToolBarButton
+            key={level}
+            selected={toolbarState[`isHeading${level}` as ToolbarStateKeys]}
+            onClick={() =>
+              editor.chain().focus().toggleHeading({ level: level }).run()
+            }
+          >
+            Título {level}
+          </ToolBarButton>
+        ))}
       </div>
     </div>
   );

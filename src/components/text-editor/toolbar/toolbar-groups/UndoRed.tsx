@@ -1,33 +1,33 @@
-import { MenuBarEditorState } from '@/types';
+import type { ToolbarState } from '@/types';
 import type { Editor } from '@tiptap/core';
 import { PiArrowArcLeft, PiArrowArcRight } from 'react-icons/pi';
 import ToolBarButton from '../ToolbarButton';
 
 const UndoRedo = ({
   editor,
-  editorState
+  toolbarState
 }: {
   editor: Editor;
-  editorState: MenuBarEditorState;
+  toolbarState: ToolbarState;
 }) => {
   return (
     <>
       <ToolBarButton
-        disabled={!editorState.canUndo}
+        disabled={!toolbarState.canUndo}
         onClick={() => editor.chain().focus().undo().run()}
       >
         <PiArrowArcLeft
           size={24}
-          className={editorState.canUndo ? 'text-gray-700' : 'text-gray-300'}
+          className={toolbarState.canUndo ? 'text-gray-700' : 'text-gray-300'}
         />
       </ToolBarButton>
       <ToolBarButton
-        disabled={!editorState.canRedo}
+        disabled={!toolbarState.canRedo}
         onClick={() => editor.chain().focus().redo().run()}
       >
         <PiArrowArcRight
           size={24}
-          className={editorState.canRedo ? 'text-gray-700' : 'text-gray-300'}
+          className={toolbarState.canRedo ? 'text-gray-700' : 'text-gray-300'}
         />
       </ToolBarButton>
     </>

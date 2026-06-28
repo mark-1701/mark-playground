@@ -71,8 +71,7 @@ export const TiptapTextEditor = () => {
         }
       })
     ],
-    content:
-      '<p><em>Gracias por usar mi editor...</em></p>',
+    content: '<p>puedes empezar a escribir...</p>',
     immediatelyRender: false
   });
 

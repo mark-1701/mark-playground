@@ -1,9 +1,9 @@
-import { MenuBarEditorState } from '@/types';
+import type { ToolbarState } from '@/types';
 import { Editor, EditorStateSnapshot } from '@tiptap/react';
 
 export const toolBarStateSelector = ({
   editor
-}: EditorStateSnapshot<Editor>): MenuBarEditorState => {
+}: EditorStateSnapshot<Editor>): ToolbarState => {
   return {
     isBold: editor.isActive('bold') ?? false,
     isItalic: editor.isActive('italic') ?? false,

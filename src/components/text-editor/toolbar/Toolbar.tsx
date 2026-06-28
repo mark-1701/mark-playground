@@ -1,4 +1,4 @@
-import type { MenuBarEditorState } from '@/types';
+import type { ToolbarState } from '@/types';
 import type { Editor } from '@tiptap/core';
 import { useEditorState } from '@tiptap/react';
 import ToolBarGroup from './ToolbarGroup';
@@ -15,20 +15,13 @@ type MenuBarProps = {
   editor: Editor;
 };
 
+const groups = [UndoRedo, Marks, TextAligns, Headings, Lists, Links];
+
 export const ToolBar = ({ editor }: MenuBarProps) => {
-  const editorState = useEditorState<MenuBarEditorState>({
+  const editorState = useEditorState<ToolbarState>({
     editor,
     selector: toolBarStateSelector
   });
-
-  const MENU_GROUPS = [
-    UndoRedo,
-    Marks,
-    TextAligns,
-    Headings,
-    Lists,
-    Links
-  ] as const;
 
   return (
     <>
@@ -36,9 +29,9 @@ export const ToolBar = ({ editor }: MenuBarProps) => {
         className="flex flex-wrap items-center justify-center divide-x
           divide-gray-200 border-b-2 border-b-gray-200 p-3"
       >
-        {MENU_GROUPS.map(Group => (
+        {groups.map(Group => (
           <ToolBarGroup key={Group.name}>
-            <Group editor={editor} editorState={editorState} />
+            <Group editor={editor} toolbarState={editorState} />
           </ToolBarGroup>
         ))}
 

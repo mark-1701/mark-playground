@@ -1,32 +1,36 @@
-import { MenuBarEditorState } from '@/types';
+import type { ToolbarState } from '@/types';
 import type { Editor } from '@tiptap/core';
-import { PiTextAlignCenter, PiTextAlignLeft, PiTextAlignRight } from 'react-icons/pi';
+import {
+  PiTextAlignCenter,
+  PiTextAlignLeft,
+  PiTextAlignRight
+} from 'react-icons/pi';
 import ToolBarButton from '../ToolbarButton';
 
 const TextAligns = ({
   editor,
-  editorState
+  toolbarState
 }: {
   editor: Editor;
-  editorState: MenuBarEditorState;
+  toolbarState: ToolbarState;
 }) => {
   return (
     <>
       <ToolBarButton
-        selected={editorState.isLeft}
+        selected={toolbarState.isLeft}
         onClick={() => editor.chain().focus().setTextAlign('left').run()}
       >
         <PiTextAlignLeft size={24} className="text-gray-700" />
       </ToolBarButton>
 
       <ToolBarButton
-        selected={editorState.isCenter}
+        selected={toolbarState.isCenter}
         onClick={() => editor.chain().focus().setTextAlign('center').run()}
       >
         <PiTextAlignCenter size={24} className="text-gray-700" />
       </ToolBarButton>
       <ToolBarButton
-        selected={editorState.isRight}
+        selected={toolbarState.isRight}
         onClick={() => editor.chain().focus().setTextAlign('right').run()}
       >
         <PiTextAlignRight size={24} className="text-gray-700" />
