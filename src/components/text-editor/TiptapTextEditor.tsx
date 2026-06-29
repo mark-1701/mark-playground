@@ -1,7 +1,7 @@
 'use client';
 
 import { EditorContent, useEditor } from '@tiptap/react';
-import { extensionsConfig } from './tiptap-extensions';
+import { extensionsConfig } from './extensions';
 import { ToolBar } from './toolbar/Toolbar';
 
 export const TiptapTextEditor = () => {

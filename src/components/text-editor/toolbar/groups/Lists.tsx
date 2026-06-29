@@ -1,7 +1,7 @@
 import { ToolbarState } from '@/types';
 import type { Editor } from '@tiptap/core';
 import { PiListBullets, PiListNumbers } from 'react-icons/pi';
-import ToolBarButton from '../ToolbarButton';
+import ToolBarButton from '../ui/ToolbarButton';
 
 const Lists = ({
   editor,

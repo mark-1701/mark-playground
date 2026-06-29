@@ -5,9 +5,9 @@ import {
   PiTextAlignLeft,
   PiTextAlignRight
 } from 'react-icons/pi';
-import ToolBarButton from '../ToolbarButton';
+import ToolBarButton from '../ui/ToolbarButton';
 
-const TextAligns = ({
+const TextAlign = ({
   editor,
   toolbarState
 }: {
@@ -39,4 +39,4 @@ const TextAligns = ({
   );
 };
 
-export default TextAligns;
+export default TextAlign;

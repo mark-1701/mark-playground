@@ -1,7 +1,7 @@
 import type { Editor } from '@tiptap/core';
 import { useRef } from 'react';
 import { PiImage } from 'react-icons/pi';
-import ToolBarButton from '../ToolbarButton';
+import ToolBarButton from '../ui/ToolbarButton';
 
 const InsertImage = ({ editor }: { editor: Editor }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);

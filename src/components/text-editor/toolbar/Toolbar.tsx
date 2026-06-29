@@ -1,27 +1,24 @@
 import type { ToolbarState } from '@/types';
 import type { Editor } from '@tiptap/core';
 import { useEditorState } from '@tiptap/react';
-import ToolBarGroup from './ToolbarGroup';
-import { toolBarStateSelector } from './toolBarStateSelector';
-import Headings from './toolbar-groups/Headings';
-import InsertImage from './toolbar-groups/InsertImage';
-import Links from './toolbar-groups/Links';
-import Lists from './toolbar-groups/Lists';
-import Marks from './toolbar-groups/Marks';
-import TextAligns from './toolbar-groups/TextAligns';
-import UndoRedo from './toolbar-groups/UndoRedo';
+import Headings from './groups/Headings';
+import InsertImage from './groups/InsertImage';
+import Links from './groups/Links';
+import Lists from './groups/Lists';
+import Marks from './groups/Marks';
+import TextAlign from './groups/TextAlign';
+import UndoRedo from './groups/UndoRedo';
+import { useToolbarState } from './useToolbarState';
+import ToolBarGroup from './ui/ToolbarGroup';
 
 type MenuBarProps = {
   editor: Editor;
 };
 
-const groups = [UndoRedo, Marks, TextAligns, Headings, Lists, Links];
+const groups = [UndoRedo, Marks, TextAlign, Headings, Lists, Links];
 
 export const ToolBar = ({ editor }: MenuBarProps) => {
-  const editorState = useEditorState<ToolbarState>({
-    editor,
-    selector: toolBarStateSelector
-  });
+  const editorState = useToolbarState(editor);
 
   return (
     <>

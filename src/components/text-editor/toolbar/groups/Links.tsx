@@ -2,7 +2,7 @@ import type { ToolbarState } from '@/types';
 import type { Editor } from '@tiptap/core';
 import { useCallback } from 'react';
 import { PiLink, PiLinkBreak } from 'react-icons/pi';
-import ToolBarButton from '../ToolbarButton';
+import ToolBarButton from '../ui/ToolbarButton';
 
 const Links = ({
   editor,
