@@ -3,13 +3,13 @@ import type { Editor } from '@tiptap/core';
 import { useEditorState } from '@tiptap/react';
 import ToolBarGroup from './ToolbarGroup';
 import { toolBarStateSelector } from './toolBarStateSelector';
-import Headings from './toolbar-groups/Hedings';
+import Headings from './toolbar-groups/Headings';
 import InsertImage from './toolbar-groups/InsertImage';
 import Links from './toolbar-groups/Links';
 import Lists from './toolbar-groups/Lists';
 import Marks from './toolbar-groups/Marks';
 import TextAligns from './toolbar-groups/TextAligns';
-import UndoRedo from './toolbar-groups/UndoRed';
+import UndoRedo from './toolbar-groups/UndoRedo';
 
 type MenuBarProps = {
   editor: Editor;
