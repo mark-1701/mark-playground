@@ -1,6 +1,4 @@
-import type { ToolbarState } from '@/types';
 import type { Editor } from '@tiptap/core';
-import { useEditorState } from '@tiptap/react';
 import Headings from './groups/Headings';
 import InsertImage from './groups/InsertImage';
 import Links from './groups/Links';
@@ -8,14 +6,14 @@ import Lists from './groups/Lists';
 import Marks from './groups/Marks';
 import TextAlign from './groups/TextAlign';
 import UndoRedo from './groups/UndoRedo';
-import { useToolbarState } from './useToolbarState';
 import ToolBarGroup from './ui/ToolbarGroup';
+import { useToolbarState } from './useToolbarState';
 
 type MenuBarProps = {
   editor: Editor;
 };
 
-const groups = [UndoRedo, Marks, TextAlign, Headings, Lists, Links];
+const groups = [UndoRedo, Marks, Headings, Lists, TextAlign, Links];
 
 export const ToolBar = ({ editor }: MenuBarProps) => {
   const editorState = useToolbarState(editor);
@@ -34,6 +32,7 @@ export const ToolBar = ({ editor }: MenuBarProps) => {
 
         <ToolBarGroup>
           <InsertImage editor={editor} />
+          <ShowDocument editor={editor} />
         </ToolBarGroup>
       </div>
     </>
@@ -47,6 +46,7 @@ const ShowDocument = ({ editor }: { editor: Editor }) => {
         console.log(editor.getJSON());
         console.log(editor.getHTML());
       }}
+      className="flex items-center"
     >
       Mostrar
     </button>

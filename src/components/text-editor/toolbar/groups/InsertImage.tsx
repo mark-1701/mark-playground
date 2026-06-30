@@ -39,8 +39,12 @@ const InsertImage = ({ editor }: { editor: Editor }) => {
         onChange={handleImageUpload}
       />
 
-      <ToolBarButton onClick={() => fileInputRef.current?.click()}>
+      <ToolBarButton
+        onClick={() => fileInputRef.current?.click()}
+        className="flex items-center justify-center gap-2"
+      >
         <PiImage size={24} className="text-gray-700" />
+        Cargar
       </ToolBarButton>
     </>
   );
