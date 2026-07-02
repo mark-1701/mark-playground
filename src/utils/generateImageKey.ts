@@ -1,0 +1,11 @@
+import { nanoid } from 'nanoid';
+
+export const generateImageKey = (fileName: string) => {
+  const uuid = nanoid();
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const ext = fileName.split('.').pop(); // extension
+
+  return `articles/${year}/${month}/${uuid}.${ext}`;
+};

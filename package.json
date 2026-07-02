@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1077.0",
+    "@aws-sdk/s3-request-presigner": "^3.1077.0",
     "@tiptap/extension-file-handler": "^3.27.1",
     "@tiptap/extension-highlight": "^3.27.1",
     "@tiptap/extension-image": "^3.27.1",

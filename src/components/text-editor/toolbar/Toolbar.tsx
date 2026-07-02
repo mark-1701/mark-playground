@@ -46,7 +46,7 @@ const ShowDocument = ({ editor }: { editor: Editor }) => {
         console.log(editor.getJSON());
         console.log(editor.getHTML());
       }}
-      className="flex items-center"
+      className="flex items-center cursor-pointer"
     >
       Mostrar
     </button>

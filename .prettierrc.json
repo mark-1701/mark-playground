@@ -10,11 +10,13 @@
   "importOrder": [
     "<BUILTIN_MODULES>",
     "<THIRD_PARTY_MODULES>",
+    "^@core/(.*)$",
     "^@/config/(.*)$",
     "^@/actions/(.*)$",
+    "^@/services/(.*)$",
     "^@/components/(.*)$",
-    "^@/utls/(.*)$",
-    "^@/types/(.*)$",
+    "^@/hooks/(.*)$",
+    "^@/utils/(.*)$",
     "^[./]"
   ],
   "importOrderSeparation": false,

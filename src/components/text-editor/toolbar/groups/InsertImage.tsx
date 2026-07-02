@@ -1,32 +1,30 @@
 import type { Editor } from '@tiptap/core';
 import { useRef } from 'react';
 import { PiImage } from 'react-icons/pi';
+import { useImageUpload } from '@/hooks/useImageUpload';
 import ToolBarButton from '../ui/ToolbarButton';
 
 const InsertImage = ({ editor }: { editor: Editor }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { uploadImage } = useImageUpload();
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     if (!file || !editor) return;
 
-    const fileReader = new FileReader();
+    const publicUrl = await uploadImage(file);
 
-    fileReader.onload = event => {
-      editor
-        .chain()
-        .insertContentAt(editor.state.selection.anchor, {
-          type: 'image',
-          attrs: {
-            src: fileReader.result
-          }
-        })
-        .focus()
-        .run();
-    };
-
-    fileReader.readAsDataURL(file);
+    editor
+      .chain()
+      .insertContentAt(editor.state.selection.anchor, {
+        type: 'image',
+        attrs: {
+          src: publicUrl
+        }
+      })
+      .focus()
+      .run();
   };
 
   return (

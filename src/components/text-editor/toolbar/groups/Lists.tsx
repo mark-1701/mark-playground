@@ -1,4 +1,4 @@
-import { ToolbarState } from '@/types';
+import type { ToolbarState } from '@/types';
 import type { Editor } from '@tiptap/core';
 import { PiListBullets, PiListNumbers } from 'react-icons/pi';
 import ToolBarButton from '../ui/ToolbarButton';
