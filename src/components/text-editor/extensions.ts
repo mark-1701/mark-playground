@@ -5,6 +5,21 @@ import Image from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import StarterKit from '@tiptap/starter-kit';
 
+const CustomImage = Image.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      ['data-r2-key']: {
+        default: null,
+        parseHTML: element => element.getAttribute('data-r2-key'),
+        renderHTML: attributes => {
+          return { 'data-r2-key': attributes['data-r2-key'] };
+        }
+      }
+    };
+  }
+});
+
 export const extensionsConfig: Extensions = [
   StarterKit,
   TextAlign.configure({
@@ -12,7 +27,7 @@ export const extensionsConfig: Extensions = [
     defaultAlignment: 'left'
   }),
   Highlight,
-  Image,
+  CustomImage,
   FileHandler.configure({
     allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
     onDrop: (currentEditor, files, pos) => {

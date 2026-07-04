@@ -1,7 +1,9 @@
+import { registerMedia, updateMediaUrl } from '@/actions';
 import type { Editor } from '@tiptap/core';
 import { useRef } from 'react';
 import { PiImage } from 'react-icons/pi';
 import { useImageUpload } from '@/hooks/useImageUpload';
+import { generateImageKey } from '@/utils/generateImageKey';
 import ToolBarButton from '../ui/ToolbarButton';
 
 const InsertImage = ({ editor }: { editor: Editor }) => {
@@ -13,18 +15,32 @@ const InsertImage = ({ editor }: { editor: Editor }) => {
 
     if (!file || !editor) return;
 
-    const publicUrl = await uploadImage(file);
+    const key = generateImageKey(file.name);
 
-    editor
-      .chain()
-      .insertContentAt(editor.state.selection.anchor, {
-        type: 'image',
-        attrs: {
-          src: publicUrl
-        }
-      })
-      .focus()
-      .run();
+    try {
+      // registrar media
+      const media = await registerMedia(key);
+
+      // hostear las imagenes en el servicio storage
+      const publicUrl = await uploadImage(file, key);
+
+      // actualizar la url
+      await updateMediaUrl(media.id, publicUrl);
+
+      editor
+        .chain()
+        .insertContentAt(editor.state.selection.anchor, {
+          type: 'image',
+          attrs: {
+            src: publicUrl,
+            ['data-r2-key']: key
+          }
+        })
+        .focus()
+        .run();
+    } catch (error) {
+      console.log('Ocurrió un error insertando la imagen');
+    }
   };
 
   return (

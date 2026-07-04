@@ -1,4 +1,6 @@
 import type { Editor } from '@tiptap/core';
+import { PiPrinter } from 'react-icons/pi';
+import { updateMediaStatuses } from '@/actions/media/update-media-statuses';
 import Headings from './groups/Headings';
 import InsertImage from './groups/InsertImage';
 import Links from './groups/Links';
@@ -6,6 +8,7 @@ import Lists from './groups/Lists';
 import Marks from './groups/Marks';
 import TextAlign from './groups/TextAlign';
 import UndoRedo from './groups/UndoRedo';
+import ToolBarButton from './ui/ToolbarButton';
 import ToolBarGroup from './ui/ToolbarGroup';
 import { useToolbarState } from './useToolbarState';
 
@@ -41,14 +44,22 @@ export const ToolBar = ({ editor }: MenuBarProps) => {
 
 const ShowDocument = ({ editor }: { editor: Editor }) => {
   return (
-    <button
-      onClick={() => {
-        console.log(editor.getJSON());
-        console.log(editor.getHTML());
+    <ToolBarButton
+      onClick={async () => {
+        const keys = new Set<string>();
+
+        editor.state.doc.descendants(node => {
+          if (node.type.name === 'image' && node.attrs['data-r2-key']) {
+            keys.add(node.attrs['data-r2-key']);
+          }
+        });
+
+        await updateMediaStatuses([...keys]);
       }}
-      className="flex items-center cursor-pointer"
+      className="flex gap-2"
     >
-      Mostrar
-    </button>
+      <PiPrinter size={24} className="text-gray-700" />
+      Print
+    </ToolBarButton>
   );
 };

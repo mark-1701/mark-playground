@@ -20,7 +20,7 @@ export const TiptapTextEditor = () => {
 
   return (
     <div
-      className="m-2 mx-auto mt-15 w-[1400px] rounded-md border border-gray-200
+      className="m-2 mx-auto mt-15 max-[1400px] rounded-md border border-gray-200
         shadow"
     >
       <ToolBar editor={editor} />
@@ -28,3 +28,5 @@ export const TiptapTextEditor = () => {
     </div>
   );
 };
+
+
