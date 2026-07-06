@@ -12,11 +12,30 @@ datasource db {
   provider = "postgresql"
 }
 
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
 enum MediaStatus {
   DRAFT
   ATTACHED
   ORPHAN
   DELETED
+}
+
+model Post {
+  id          String     @id @default(uuid())
+  status      PostStatus @default(DRAFT)
+  title       String?
+  slug        String?     @unique
+  content     Json?
+  publishedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  medias Media[]
 }
 
 model Media {
@@ -26,4 +45,10 @@ model Media {
   url       String?
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
+
+  // foreign key
+  postId String?
+
+  // relations
+  post Post? @relation(fields: [postId], references: [id])
 }

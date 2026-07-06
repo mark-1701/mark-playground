@@ -1,34 +1,16 @@
+// actions/media/update-media-statuses.ts
 'use server';
 
 import { MediaStatus } from '@/app/generated/prisma/enums';
 import prisma from '@/lib/prisma';
+import { mediaStatusOperations } from './media-status-operations';
 
-export const updateMediaStatuses = async (keys: string[]) => {
-  await prisma.$transaction([
-    prisma.media.updateMany({
-      where: {
-        r2Key: {
-          in: keys
-        }
-      },
-      data: {
-        status: MediaStatus.ATTACHED
-      }
-    }),
-    prisma.media.updateMany({
-      where: {
-        r2Key: {
-          notIn: keys
-        }
-      },
-      data: {
-        status: MediaStatus.ORPHAN
-      }
-    })
-  ]);
-
+export const updateMediaStatuses = async (postId: string, keys: string[]) => {
   try {
+    await prisma.$transaction(mediaStatusOperations(postId, keys));
+    return { ok: true };
   } catch (error) {
-    throw new Error('Error actualizando los estados de media');
+    console.error(error);
+    return { ok: false, message: 'Error actualizando los estados de media' };
   }
 };

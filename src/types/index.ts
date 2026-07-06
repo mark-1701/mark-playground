@@ -24,3 +24,7 @@ export type ToolbarState = {
 
   isLink: boolean;
 };
+
+export type ActionResult<T> =
+  | { ok: true; data: T }
+  | { ok: false; message: string };

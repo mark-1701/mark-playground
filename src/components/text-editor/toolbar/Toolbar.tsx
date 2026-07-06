@@ -1,6 +1,6 @@
 import type { Editor } from '@tiptap/core';
 import { PiPrinter } from 'react-icons/pi';
-import { updateMediaStatuses } from '@/actions/media/update-media-statuses';
+import { publishPost } from '@/actions/post/publish-post';
 import Headings from './groups/Headings';
 import InsertImage from './groups/InsertImage';
 import Links from './groups/Links';
@@ -46,15 +46,24 @@ const ShowDocument = ({ editor }: { editor: Editor }) => {
   return (
     <ToolBarButton
       onClick={async () => {
-        const keys = new Set<string>();
+        const mediaKeys = new Set<string>();
 
         editor.state.doc.descendants(node => {
           if (node.type.name === 'image' && node.attrs['data-r2-key']) {
-            keys.add(node.attrs['data-r2-key']);
+            mediaKeys.add(node.attrs['data-r2-key']);
           }
         });
 
-        await updateMediaStatuses([...keys]);
+        const postId = '0f2f61af-915d-422d-98f5-74583eab6941';
+        const title = `título + ${new Date().toISOString()}`;
+        const content = JSON.stringify(editor.getJSON());
+
+        const resp = await publishPost(postId, title, content, [...mediaKeys]);
+
+        if (!resp.ok) {
+          // TODO: FALTA RETROALIMENTACIÓN VISUAL AL USUARIO
+          console.log('Ocurrió un error');
+        }
       }}
       className="flex gap-2"
     >

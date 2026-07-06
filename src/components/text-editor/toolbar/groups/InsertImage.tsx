@@ -16,31 +16,32 @@ const InsertImage = ({ editor }: { editor: Editor }) => {
     if (!file || !editor) return;
 
     const key = generateImageKey(file.name);
+    const postId = '0f2f61af-915d-422d-98f5-74583eab6941';
 
-    try {
-      // registrar media
-      const media = await registerMedia(key);
-
-      // hostear las imagenes en el servicio storage
-      const publicUrl = await uploadImage(file, key);
-
-      // actualizar la url
-      await updateMediaUrl(media.id, publicUrl);
-
-      editor
-        .chain()
-        .insertContentAt(editor.state.selection.anchor, {
-          type: 'image',
-          attrs: {
-            src: publicUrl,
-            ['data-r2-key']: key
-          }
-        })
-        .focus()
-        .run();
-    } catch (error) {
-      console.log('Ocurrió un error insertando la imagen');
+    // 1. registrar media
+    const media = await registerMedia(postId, key);
+    if (!media.ok) {
+      console.log('hubo un error');
+      return;
     }
+
+    // 2. guardar la imágen en el storage
+    const publicUrl = await uploadImage(file, key);
+
+    // 3. actualizar la url
+    await updateMediaUrl(media.data?.id, publicUrl);
+
+    editor
+      .chain()
+      .insertContentAt(editor.state.selection.anchor, {
+        type: 'image',
+        attrs: {
+          src: publicUrl,
+          ['data-r2-key']: key
+        }
+      })
+      .focus()
+      .run();
   };
 
   return (
