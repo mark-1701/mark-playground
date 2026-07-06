@@ -33,3 +33,20 @@ export const createPresignedUpload = async ({
 
   return { publicUrl, uploadUrl };
 };
+
+export const uploadImageToStorage = async (file: File, key: string) => {
+  const { publicUrl, uploadUrl } = await createPresignedUpload({
+    key,
+    fileType: file.type
+  });
+
+  const response = await fetch(uploadUrl, {
+    method: 'PUT',
+    body: file,
+    headers: { 'Content-Type': file.type }
+  });
+
+  if (!response.ok) throw new Error('Error al subir la imágen al storage');
+
+  return publicUrl;
+};

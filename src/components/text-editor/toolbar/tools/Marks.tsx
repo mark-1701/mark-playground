@@ -8,7 +8,7 @@ import {
   PiTextStrikethrough,
   PiTextUnderline
 } from 'react-icons/pi';
-import ToolBarButton from '../ui/ToolbarButton';
+import ToolBarButton from '../components/ToolbarButton';
 
 type MarkConfig = {
   key: keyof ToolbarState;

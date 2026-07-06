@@ -3,7 +3,7 @@ import type { Editor } from '@tiptap/core';
 import type { Level } from '@tiptap/extension-heading';
 import { IoChevronDownOutline } from 'react-icons/io5';
 import { PiTextHOne } from 'react-icons/pi';
-import ToolBarButton from '../ui/ToolbarButton';
+import ToolBarButton from '../components/ToolbarButton';
 
 type ToolbarStateKeys = keyof ToolbarState;
 
