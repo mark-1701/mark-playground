@@ -24,7 +24,7 @@ const Headings = ({
       </div>
 
       <div
-        className="invisible absolute top-full z-10 w-[80px] bg-white
+        className="invisible absolute top-full z-20 w-19 bg-white py-2
           text-center shadow-lg group-hover:visible"
       >
         {headingLevels.map(level => (

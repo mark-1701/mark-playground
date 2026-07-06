@@ -19,14 +19,14 @@ export const TiptapTextEditor = () => {
   if (!editor) return null;
 
   return (
-    <div
-      className="m-2 mx-auto mt-15 w-[1200px] rounded-md border border-gray-200
-        shadow"
-    >
-      <ToolBar editor={editor} />
-      <EditorContent editor={editor} />
-    </div>
+    <>
+      <div
+        className="m-2 mx-auto mt-15 w-[1200px] rounded-md border
+          border-gray-200 shadow"
+      >
+        <ToolBar editor={editor} />
+        <EditorContent editor={editor} />
+      </div>
+    </>
   );
 };
-
-

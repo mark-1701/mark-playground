@@ -56,10 +56,10 @@ const InsertImage = ({ editor }: { editor: Editor }) => {
 
       <ToolBarButton
         onClick={() => fileInputRef.current?.click()}
-        className="flex items-center justify-center gap-2"
+        className="flex items-center justify-center gap-1"
       >
+        +
         <PiImage size={24} className="text-gray-700" />
-        Cargar
       </ToolBarButton>
     </>
   );
