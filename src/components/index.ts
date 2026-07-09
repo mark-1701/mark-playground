@@ -1,1 +1,1 @@
-export * from './text-editor/TiptapTextEditor'
+export * from './text-editor/TextEditor'

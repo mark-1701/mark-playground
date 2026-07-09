@@ -1,0 +1,24 @@
+import { getPosts } from '@/actions';
+import Link from 'next/link';
+
+const PotsPage = async () => {
+  const resp = await getPosts();
+  if (!resp.ok) return <>not found</>;
+
+  return (
+    <div className="m-40">
+      {resp.data.map(post => (
+        <div key={post.id}>
+          <Link
+            href={`/posts/${post.id}`}
+            className="text-blue-500 hover:cursor-pointer hover:underline"
+          >
+            {post.title}
+          </Link>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default PotsPage;

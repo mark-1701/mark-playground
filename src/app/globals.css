@@ -26,6 +26,8 @@ body {
 }
 
 .tiptap {
+  @apply m-3 min-h-[500px] focus:outline-none;
+
   p,
   img {
     @apply mb-4;

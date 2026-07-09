@@ -3,15 +3,28 @@ import type { Editor } from '@tiptap/core';
 import { useState } from 'react';
 import { uploadImageToStorage } from '@/services/storage/r2';
 import { generateImageKey } from '@/utils/generateImageKey';
+import { UploadImageStatus } from '../types';
 
-export const useInsertImage = (editor: Editor, postId: string) => {
-  const [status, setStatus] = useState('idle');
+// TODO: implementar mécanismos de seguridad para evitar las múltiples socitudes
+// TODO: insertar una imagen temporal (spinner de carga)
+
+export const useInsertImage = () => {
+  const [status, setStatus] = useState<UploadImageStatus>('idle');
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const isUploadingImage = status === 'uploading';
 
-  const insertImage = async (file: File) => {
+  const insertImage = async (
+    editor: Editor,
+    postId: string,
+    file: File,
+    position?: number
+  ) => {
     if (!file || !editor) return;
 
     const key = generateImageKey(file.name);
+    const insertPos = position ?? editor.state.selection.anchor;
+
+    setStatus('uploading');
 
     try {
       // 1. registrar media
@@ -27,7 +40,7 @@ export const useInsertImage = (editor: Editor, postId: string) => {
       // 4. insertar imagen en el editor
       editor
         .chain()
-        .insertContentAt(editor.state.selection.anchor, {
+        .insertContentAt(insertPos, {
           type: 'image',
           attrs: {
             src: publicUrl,
@@ -36,11 +49,17 @@ export const useInsertImage = (editor: Editor, postId: string) => {
         })
         .focus()
         .run();
+      setStatus('success');
     } catch (error) {
-      setStatus('Error');
+      setStatus('error');
       setUploadError('Error insertando imagen');
     }
   };
 
-  return { insertImage, status, uploadError };
+  return {
+    insertImage,
+    status,
+    isUploadingImage,
+    uploadError
+  };
 };

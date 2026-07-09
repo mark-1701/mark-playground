@@ -23,7 +23,7 @@ export const ToolBar = ({ editor }: MenuBarProps) => {
     <>
       <div
         className="sticky top-0 z-10 flex h-11 items-center justify-between
-          border-b-2 border-b-gray-200 bg-white p-3"
+          border-b-2 border-b-gray-300 bg-white p-3"
       >
         <div className="flex divide-x divide-gray-200">
           {tools.map(Tool => (
@@ -33,10 +33,9 @@ export const ToolBar = ({ editor }: MenuBarProps) => {
           ))}
           <ToolBarGroup>
             <InsertImage editor={editor} />
+            <PublishDocument editor={editor} />
           </ToolBarGroup>
         </div>
-
-        <PublishDocument editor={editor} />
       </div>
     </>
   );

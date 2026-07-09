@@ -1,16 +1,16 @@
 'use server';
 
-import { Post } from '@/app/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import { ActionResult } from '@/types';
 import { mediaStatusOperations } from '../media/media-status-operations';
+
+type PublshPostActionResult = { ok: true } | { ok: false; message: string };
 
 export const publishPost = async (
   postId: string,
   title: string,
   content: string,
   mediakeys: string[]
-) => {
+): Promise<PublshPostActionResult> => {
   try {
     const contentJSON = JSON.parse(content);
 

@@ -1,8 +1,12 @@
 import type { Editor } from '@tiptap/core';
+import { useState } from 'react';
 import { publishPost } from '@/actions/post/publish-post';
 
-export const usePublishPost = (editor: Editor, postId: string) => {
-  const publish = (title?: string) => {
+export const usePublishPost = () => {
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [publishError, setPublishError] = useState<string | null>(null);
+
+  const publish = async (editor: Editor, postId: string, title?: string) => {
     const content = JSON.stringify(editor.getJSON());
     const mediaKeys = new Set<string>();
     const finalTitle = title ?? `título + ${new Date().toISOString()}`;
@@ -13,8 +17,14 @@ export const usePublishPost = (editor: Editor, postId: string) => {
       }
     });
 
-    return publishPost(postId, finalTitle, content, [...mediaKeys]);
+    setIsPublishing(true);
+
+    const resp = await publishPost(postId, finalTitle, content, [...mediaKeys]);
+
+    if (!resp.ok) setPublishError(resp.message);
+
+    setIsPublishing(false);
   };
 
-  return { publish };
+  return { publish, isPublishing, publishError };
 };

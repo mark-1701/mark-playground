@@ -5,24 +5,29 @@ import ToolBarButton from '../components/ToolbarButton';
 
 const PublishDocument = ({ editor }: { editor: Editor }) => {
   const postId = '0f2f61af-915d-422d-98f5-74583eab6941';
-  const { publish } = usePublishPost(editor, postId);
+  const { publish, isPublishing } = usePublishPost();
 
   return (
-    <ToolBarButton
-      onClick={async () => {
-        const resp = await publish();
+    <>
+      {/* {true && (
+        <div
+          className="fixed top-1/2 left-1/2 flex -translate-1/2 flex-col
+            items-center justify-center gap-2 rounded-md border border-gray-200
+            bg-white p-2 shadow-lg"
+        >
+          <p className="text-gray-800">cargando...</p>
+        </div>
+      )} */}
 
-        if (!resp.ok) {
-          // TODO: FALTA RETROALIMENTACIÓN VISUAL AL USUARIO
-          console.log('Ocurrió un error');
-        }
-      }}
-      className="flex gap-1 bg-blue-500 hover:bg-blue-400"
-    >
-      {/* <MdPublish size={24} className="text-white" /> */}
-      <LiaSave size={24} className="text-white" />
-      <p className="text-white">Guardar</p>
-    </ToolBarButton>
+      <ToolBarButton
+        onClick={() => publish(editor, postId)}
+        disabled={isPublishing}
+        className="flex gap-1 bg-blue-500 hover:bg-blue-400 disabled:opacity-70"
+      >
+        <LiaSave size={24} className="text-white" />
+        <p className="text-white">Guardar</p>
+      </ToolBarButton>
+    </>
   );
 };
 
