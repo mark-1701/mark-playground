@@ -1,11 +1,3 @@
-'use client';
-
-import { TiptapTextEditor } from '@/components';
-
 export default function Home() {
-  return (
-    <>
-      <TiptapTextEditor />
-    </>
-  );
+  return <div>Esta es la página inicio</div>;
 }

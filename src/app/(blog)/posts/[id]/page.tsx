@@ -1,5 +1,5 @@
 import { getPostById } from '@/actions';
-import PostContent from '../PostContent';
+import PostContent from '../../../../components/PostContent';
 
 type PostIdPage = {
   params: {
