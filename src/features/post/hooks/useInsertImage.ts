@@ -1,8 +1,11 @@
+'use client';
+
 import { registerMedia, updateMediaUrl } from '@/actions';
+import { generateImageKey } from '@/utils';
 import type { Editor } from '@tiptap/core';
+import { getCookie } from 'cookies-next/client';
 import { useState } from 'react';
 import { uploadImageToStorage } from '@/services/storage/r2';
-import { generateImageKey } from '@/utils/generateImageKey';
 import { UploadImageStatus } from '../types';
 
 // TODO: implementar mécanismos de seguridad para evitar las múltiples socitudes
@@ -15,7 +18,6 @@ export const useInsertImage = () => {
 
   const insertImage = async (
     editor: Editor,
-    postId: string,
     file: File,
     position?: number
   ) => {
@@ -23,6 +25,10 @@ export const useInsertImage = () => {
 
     const key = generateImageKey(file.name);
     const insertPos = position ?? editor.state.selection.anchor;
+
+    // TODO: validar cookie
+    const postId = getCookie('post:postId');
+    if (!postId) return; // ! error
 
     setStatus('uploading');
 
@@ -49,6 +55,7 @@ export const useInsertImage = () => {
         })
         .focus()
         .run();
+
       setStatus('success');
     } catch (error) {
       setStatus('error');

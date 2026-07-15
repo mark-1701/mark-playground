@@ -1,6 +1,6 @@
-import type { ToolbarState } from '@/types';
 import type { Editor } from '@tiptap/core';
 import { EditorStateSnapshot, useEditorState } from '@tiptap/react';
+import type { ToolbarState } from './types';
 
 export const useToolbarState = (editor: Editor) => {
   const editorState = useEditorState({

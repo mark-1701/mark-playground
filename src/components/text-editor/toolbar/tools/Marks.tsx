@@ -1,4 +1,3 @@
-import type { ToolbarState } from '@/types';
 import type { Editor } from '@tiptap/core';
 import { IconType } from 'react-icons/lib';
 import {
@@ -8,6 +7,8 @@ import {
   PiTextStrikethrough,
   PiTextUnderline
 } from 'react-icons/pi';
+import type { ToolbarState } from '../../types';
+import type { ToolProps } from '../../types';
 import ToolBarButton from '../components/ToolbarButton';
 
 type MarkConfig = {
@@ -44,13 +45,7 @@ const marks: MarkConfig[] = [
   }
 ];
 
-const Marks = ({
-  editor,
-  toolbarState
-}: {
-  editor: Editor;
-  toolbarState: ToolbarState;
-}) => {
+const Marks = ({ editor, toolbarState, iconSize }: ToolProps) => {
   return (
     <>
       {marks.map(({ key, icon: Icon, toggle }) => (
@@ -59,7 +54,7 @@ const Marks = ({
           selected={toolbarState[key] as boolean}
           onClick={() => toggle(editor)}
         >
-          <Icon size={24} className="text-gray-700" />
+          <Icon size={iconSize} className="text-gray-700" />
         </ToolBarButton>
       ))}
     </>

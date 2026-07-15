@@ -1,30 +1,27 @@
 'use client';
-
-import { EditorContent, useEditor } from '@tiptap/react';
-import { createExtensionsConfig } from './config';
-import { useInsertImage } from './hooks/useInsertImage';
+import { Editor, EditorContent } from '@tiptap/react';
 import { ToolBar } from './toolbar/Toolbar';
+import type { HandleInsertImage } from './types';
 
-export const TiptapTextEditor = () => {
-  const { insertImage } = useInsertImage();
+type TextEditorProps = {
+  editor: Editor;
+  onInsertImage: HandleInsertImage;
+  isUploadingImage: boolean;
+};
 
-  const editor = useEditor({
-    extensions: createExtensionsConfig({ insertImage }),
-    content: '<p>puedes empezar a escribir...</p>',
-    immediatelyRender: false
-  });
-
-  if (!editor) return null;
-
+export const TextEditor = ({
+  editor,
+  onInsertImage,
+  isUploadingImage
+}: TextEditorProps) => {
   return (
-    <>
-      <div
-        className="m-2 mx-auto mt-15 w-[1200px] rounded-md border
-          border-gray-300 shadow"
-      >
-        <ToolBar editor={editor} />
-        <EditorContent editor={editor} />
-      </div>
-    </>
+    <div className="rounded-md border border-gray-300">
+      <ToolBar
+        editor={editor}
+        onInsertImage={onInsertImage}
+        isUploadingImage={isUploadingImage}
+      />
+      <EditorContent editor={editor} />
+    </div>
   );
 };

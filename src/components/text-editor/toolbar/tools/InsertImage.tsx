@@ -1,14 +1,15 @@
-import type { Editor } from '@tiptap/core';
 import { useRef } from 'react';
 import { PiImage } from 'react-icons/pi';
-import { useInsertImage } from '../../hooks/useInsertImage';
+import { ToolProps } from '../../types';
 import ToolBarButton from '../components/ToolbarButton';
 
-const postId = '0f2f61af-915d-422d-98f5-74583eab6941';
-
-const InsertImage = ({ editor }: { editor: Editor }) => {
+const InsertImage = ({
+  editor,
+  iconSize,
+  onInsertImage,
+  isUploadingImage
+}: ToolProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { insertImage, isUploadingImage } = useInsertImage();
 
   return (
     <>
@@ -19,7 +20,7 @@ const InsertImage = ({ editor }: { editor: Editor }) => {
         style={{ display: 'none' }}
         onChange={e => {
           const file = e.target.files?.[0];
-          if (file) insertImage(editor, postId, file);
+          if (file) onInsertImage(editor, file);
         }}
       />
 
@@ -29,7 +30,7 @@ const InsertImage = ({ editor }: { editor: Editor }) => {
         className="flex items-center justify-center gap-1 disabled:opacity-70"
       >
         +
-        <PiImage size={24} className="text-gray-700" />
+        <PiImage size={iconSize} className="text-gray-700" />
       </ToolBarButton>
     </>
   );
