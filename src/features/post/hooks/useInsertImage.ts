@@ -27,7 +27,7 @@ export const useInsertImage = () => {
     const insertPos = position ?? editor.state.selection.anchor;
 
     // TODO: validar cookie
-    const postId = getCookie('post:postId');
+    const postId = getCookie('post:draftId');
     if (!postId) return; // ! error
 
     setStatus('uploading');

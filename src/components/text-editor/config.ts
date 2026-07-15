@@ -5,14 +5,14 @@ import Image from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import StarterKit from '@tiptap/starter-kit';
 
-type HandleInsertImage = (
+type InsertImage = (
   editor: Editor,
   file: File,
   position?: number
 ) => void;
 
 export const createExtensionsConfig = (
-  handleInsertImage: HandleInsertImage
+  insertImage: InsertImage
 ): Extensions => [
   StarterKit,
   TextAlign.configure({
@@ -25,12 +25,12 @@ export const createExtensionsConfig = (
     allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
     onDrop: (currentEditor, files, pos) => {
       files.forEach(file => {
-        handleInsertImage(currentEditor, file, pos);
+        insertImage(currentEditor, file, pos);
       });
     },
     onPaste: (currentEditor, files) => {
       files.forEach(file => {
-        handleInsertImage(currentEditor, file);
+        insertImage(currentEditor, file);
       });
     }
   })
