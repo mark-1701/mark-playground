@@ -15,13 +15,15 @@ export const TextEditor = ({
   isUploadingImage
 }: TextEditorProps) => {
   return (
-    <div className="rounded-md border border-gray-300">
+    <div className="flex h-full flex-col rounded-md border border-gray-300">
       <ToolBar
         editor={editor}
         onInsertImage={onInsertImage}
         isUploadingImage={isUploadingImage}
       />
-      <EditorContent editor={editor} />
+      <div className="flex-1 overflow-auto">
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 };

@@ -11,14 +11,10 @@ const PostIdPage = async ({ params }: PostIdPage) => {
   const { id } = await params;
 
   const resp = await getPostById(id);
-  
+
   if (!resp.ok) return <p>No existe</p>;
 
-  return (
-    <div className="m-40">
-      <PostContent content={resp.data.content} />
-    </div>
-  );
+  return <PostContent content={resp.data.content} />;
 };
 
 export default PostIdPage;

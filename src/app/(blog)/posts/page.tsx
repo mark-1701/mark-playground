@@ -6,7 +6,7 @@ const PotsPage = async () => {
   if (!resp.ok) return <>not found</>;
 
   return (
-    <div className="m-40">
+    <div>
       {resp.data.map(post => (
         <div key={post.id}>
           <Link

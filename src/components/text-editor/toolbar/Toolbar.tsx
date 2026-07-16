@@ -27,10 +27,7 @@ export const ToolBar = ({
 
   return (
     <>
-      <div
-        className="sticky top-0 z-10 flex overflow-hidden border-b-2
-          border-b-gray-300 bg-white p-1"
-      >
+      <div className="flex overflow-hidden border-b-2 border-b-gray-300 p-1 ">
         <div className="flex divide-x divide-gray-200">
           {tools.map(Tool => (
             <ToolBarGroup key={Tool.name}>

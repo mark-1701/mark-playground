@@ -12,20 +12,20 @@ const NewPostPage = () => {
   const editor = useEditor({
     extensions: createExtensionsConfig(insertImage),
     content:
-      '<h1>Mi nuevo artículo</h1>' + 
-      '<p>puedes empezar a escribir..</p>',
+      '<h1>Mi nuevo artículo</h1>' + '<p>puedes empezar a escribir..</p>',
     immediatelyRender: false
   });
 
   if (!editor) return null;
 
   return (
-    <div className="px-30 pt-10">
+    <div>
       <div>
         <h1 className="mb-8 text-3xl font-bold">Crear nuevo post</h1>
       </div>
-      <div className="grid grid-cols-4 gap-4">
-        <div className="col-span-3">
+
+      <div className="flex gap-4">
+        <div className="h-[calc(100dvh-200px)] flex-1 bg-white">
           <TextEditor
             editor={editor}
             onInsertImage={insertImage}

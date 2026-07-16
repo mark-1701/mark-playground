@@ -33,7 +33,10 @@ const PostSummary = ({ editor }: PostSummaryProps) => {
   }, [editor]);
 
   return (
-    <div className="h-min overflow-hidden rounded-md border border-gray-300 p-3">
+    <div
+      className="h-min overflow-hidden rounded-md border border-gray-300
+        bg-white p-3"
+    >
       <div className="mb-4">
         <label htmlFor="title" className="mb-2 block font-medium">
           Título
@@ -78,7 +81,7 @@ const PostSummary = ({ editor }: PostSummaryProps) => {
           className="cursor-pointer bg-blue-500 p-1 px-2 text-right text-white"
           onClick={() => save(editor)}
         >
-          Publicar
+          Guardar
         </button>
       </div>
     </div>
