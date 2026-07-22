@@ -2,9 +2,10 @@
 
 import { Post } from '@/app/generated/prisma/client';
 import type { Editor } from '@tiptap/react';
-import { deleteCookie, getCookie } from 'cookies-next/client';
+import { deleteCookie } from 'cookies-next/client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { publishPost } from '@/actions/post/publish-post';
 import { getMediaKeys, getTextEditorContent } from '../utils';
@@ -14,18 +15,28 @@ type PostSummaryProps = {
   post: Post | null;
 };
 
+type Inputs = {
+  title: string;
+};
+
 const PostSummary = ({ editor, post }: PostSummaryProps) => {
   const router = useRouter();
   const isNewPost = post?.status === 'DRAFT';
-  const [title, setTitle] = useState('');
 
   // todo: bloquear el botón cuando se esta haciendo la consulta
   // const [isSaving, setIsSaving] = useState(false);
 
-  const handleSave = async () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue
+  } = useForm<Inputs>();
+
+  const onSubmit: SubmitHandler<Inputs> = async data => {
     const resp = await publishPost(
       post?.id ?? '',
-      title,
+      data.title,
       getTextEditorContent(editor),
       getMediaKeys(editor)
     );
@@ -40,14 +51,14 @@ const PostSummary = ({ editor, post }: PostSummaryProps) => {
     router.push('/dashboard/posts');
   };
 
-  const handleTitleChange = () => {
+  const syncTitleFromEditor = () => {
     let found = false;
 
     editor.state.doc.descendants(node => {
       if (found) return false; // no seguir bajando en el nodo
       if (node.type.name === 'heading' && node.attrs.level === 1) {
         if (node.textContent.trim().length > 0)
-          setTitle(node.textContent.trim());
+          setValue('title', node.textContent.trim());
         found = true;
         return false;
       }
@@ -55,71 +66,66 @@ const PostSummary = ({ editor, post }: PostSummaryProps) => {
   };
 
   useEffect(() => {
-    handleTitleChange();
-    editor.on('update', () => handleTitleChange());
+    const onUpdate = syncTitleFromEditor;
+    onUpdate();
+    editor.on('update', onUpdate);
     return () => {
-      editor.off('update', () => handleTitleChange());
+      editor.off('update', onUpdate);
     };
   }, [editor]);
 
+  const { onBlur: onTitleBlur, ...titleField } = register('title', {
+    required: true
+  });
+
   return (
     <div
-      className="flex flex-col justify-between gap-16 rounded-md border
-        border-gray-300 bg-white p-3"
+      className="w-90 gap-24 rounded-md border border-gray-300 bg-white p-4
+        px-4"
     >
-      <div>
-        <div className="mb-4">
-          <label htmlFor="title" className="mb-2 block font-medium">
-            Título
-          </label>
-          <input
-            type="text"
-            name="title"
-            id="title"
-            value={title}
-            className="w-full rounded border border-gray-300 p-1"
-            onChange={e => setTitle(e.target.value)}
-            onBlur={handleTitleChange}
-          />
+      <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <div className="mb-4">
+            <label htmlFor="title" className="mb-2 block font-medium">
+              Título
+            </label>
+            <input
+              {...titleField}
+              onBlur={e => {
+                onTitleBlur(e); // onBlur react-hook-form
+                syncTitleFromEditor(); // tu lógica extra
+              }}
+              className="mb-1 w-full rounded border border-gray-300 p-1"
+            />
+            {errors.title && (
+              <span className="ml-1 text-sm text-red-500">
+                El título es obligatorio
+              </span>
+            )}
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="miniatura" className="mb-2 block font-medium">
+              Miniatura
+            </label>
+            <input
+              type="file"
+              name="miniatura"
+              id="miniatura"
+              className="file:cursor-pointer file:bg-gray-200 file:p-0.5"
+            />
+          </div>
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="title" className="mb-2 block font-medium">
-            Slug
-          </label>
-          <input
-            type="text"
-            name="title"
-            id="title"
-            className="w-full rounded border border-gray-300 p-1"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="title" className="mb-2 block font-medium">
-            Miniatura
-          </label>
-          <input
-            type="file"
-            name="title"
-            id="title"
-            className="file:cursor-pointer file:bg-gray-200 file:p-0.5"
-          />
-        </div>
-      </div>
-
-      <div className="self-end">
-        <button
+        <input
+          type="submit"
           className={`${
             isNewPost ? 'bg-blue-500 text-white' : 'bg-yellow-300 text-black'
           }
-            cursor-pointer p-1 px-3 text-right disabled:bg-blue-400`}
-          // disabled={isSaving}
-          onClick={handleSave}
-        >
-          {isNewPost ? 'Guardar' : 'Actualizar'}
-        </button>
-      </div>
+            cursor-pointer self-end p-1 px-3 text-right disabled:bg-yellow-200`}
+          value={isNewPost ? 'Guardar' : 'Actualizar'}
+        />
+      </form>
     </div>
   );
 };
