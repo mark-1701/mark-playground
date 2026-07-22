@@ -40,3 +40,9 @@ export type ToolProps = {
   onInsertImage: HandleInsertImage;
   isUploadingImage: boolean;
 };
+
+export type InsertImage = (
+  editor: Editor,
+  file: File,
+  position?: number
+) => void;

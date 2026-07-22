@@ -28,8 +28,8 @@ enum MediaStatus {
 model Post {
   id          String     @id @default(uuid())
   status      PostStatus @default(DRAFT)
-  title       String?
-  slug        String?     @unique
+  title       String?    @default("untitled")
+  slug        String?    @unique
   content     Json?
   publishedAt DateTime?
   createdAt   DateTime   @default(now())

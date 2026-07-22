@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import NavMenu from '@/components/NavMenu';
 import { geistMono, geistSans } from '../config/fonts';
 import { ToastProvider } from '../providers/ToastProvider';
@@ -24,10 +23,8 @@ export default function RootLayout({
       <body className="bg-gray-50">
         <div className="flex h-dvh">
           <NavMenu />
-
-          <div className="w-full overflow-auto p-12">{children}</div>
+          <div className="w-full overflow-auto p-12 pb-8">{children}</div>
         </div>
-
         <ToastProvider />
       </body>
     </html>

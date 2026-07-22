@@ -13,7 +13,7 @@ const PotsPage = async () => {
             href={`/posts/${post.id}`}
             className="text-blue-500 hover:cursor-pointer hover:underline"
           >
-            {post.title}
+            {post.title ?? 'Sin título'}
           </Link>
         </div>
       ))}

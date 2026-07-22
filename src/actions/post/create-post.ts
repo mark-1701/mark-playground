@@ -3,10 +3,16 @@
 import prisma from '@/lib/prisma';
 import { ActionResult } from '@/types';
 
-export const createPost = async (): Promise<ActionResult<string>> => {
+export const createPost = async (
+  title: string,
+  content: any
+): Promise<ActionResult<string>> => {
   try {
     const post = await prisma.post.create({
-      data: {}
+      data: {
+        content,
+        title
+      }
     });
 
     return {

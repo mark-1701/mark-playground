@@ -1,19 +1,16 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { ActionResult } from '@/types';
 import { mediaStatusOperations } from '../media/media-status-operations';
-
-type PublshPostActionResult = { ok: true } | { ok: false; message: string };
 
 export const publishPost = async (
   postId: string,
   title: string,
   content: string,
   mediakeys: string[]
-): Promise<PublshPostActionResult> => {
+): Promise<ActionResult<null>> => {
   try {
-    const contentJSON = JSON.parse(content);
-
     await prisma.$transaction([
       prisma.post.update({
         where: {
@@ -21,14 +18,16 @@ export const publishPost = async (
         },
         data: {
           title,
-          content: contentJSON
+          content,
+          status: 'PUBLISHED'
         }
       }),
       ...mediaStatusOperations(postId, mediakeys)
     ]);
 
     return {
-      ok: true
+      ok: true,
+      data: null
     };
   } catch (error: any) {
     return {

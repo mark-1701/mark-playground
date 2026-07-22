@@ -6,7 +6,11 @@ import { ActionResult } from '@/types';
 
 export const getPosts = async (): Promise<ActionResult<Post[]>> => {
   try {
-    const posts = await prisma.post.findMany();
+    const posts = await prisma.post.findMany({
+      orderBy: {
+        createdAt: 'asc'
+      }
+    });
 
     return {
       ok: true,

@@ -21,7 +21,7 @@ export const TextEditor = ({
         onInsertImage={onInsertImage}
         isUploadingImage={isUploadingImage}
       />
-      <div className="flex-1 overflow-auto">
+      <div className="overflow-auto">
         <EditorContent editor={editor} />
       </div>
     </div>

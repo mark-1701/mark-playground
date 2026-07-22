@@ -4,12 +4,7 @@ import Highlight from '@tiptap/extension-highlight';
 import Image from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import StarterKit from '@tiptap/starter-kit';
-
-type InsertImage = (
-  editor: Editor,
-  file: File,
-  position?: number
-) => void;
+import { InsertImage } from './types';
 
 export const createExtensionsConfig = (
   insertImage: InsertImage

@@ -1,6 +1,7 @@
 'use client';
 
 import PostSummary from '@/features/post/components/PostSummary';
+import { useDraftPost } from '@/features/post/hooks/useDraftPost';
 import { useInsertImage } from '@/features/post/hooks/useInsertImage';
 import { useEditor } from '@tiptap/react';
 import { TextEditor } from '@/components/text-editor/TextEditor';
@@ -8,24 +9,17 @@ import { createExtensionsConfig } from '@/components/text-editor/config';
 
 const NewPostPage = () => {
   const { insertImage, isUploadingImage } = useInsertImage();
+  const editor = getTiptapTextEditorInstance(insertImage);
+  const { post } = useDraftPost(editor);
 
-  const editor = useEditor({
-    extensions: createExtensionsConfig(insertImage),
-    content:
-      '<h1>Mi nuevo artículo</h1>' + '<p>puedes empezar a escribir..</p>',
-    immediatelyRender: false
-  });
-
-  if (!editor) return null;
+  if (!editor) return <p>loading...</p>;
 
   return (
-    <div>
-      <div>
-        <h1 className="mb-8 text-3xl font-bold">Crear nuevo post</h1>
-      </div>
+    <div className="flex h-full flex-col gap-8">
+      <h1 className="text-3xl font-bold">Crear nuevo post</h1>
 
-      <div className="flex gap-4">
-        <div className="h-[calc(100dvh-200px)] flex-1 bg-white">
+      <div className="flex min-h-0 flex-1 gap-4">
+        <div className="flex-1">
           <TextEditor
             editor={editor}
             onInsertImage={insertImage}
@@ -33,7 +27,7 @@ const NewPostPage = () => {
           />
         </div>
         <div>
-          <PostSummary editor={editor} />
+          <PostSummary editor={editor} post={post} />
         </div>
       </div>
     </div>
@@ -41,3 +35,11 @@ const NewPostPage = () => {
 };
 
 export default NewPostPage;
+
+const getTiptapTextEditorInstance = (insertImage: any) => {
+  return useEditor({
+    extensions: createExtensionsConfig(insertImage),
+    content: '',
+    immediatelyRender: false
+  });
+};

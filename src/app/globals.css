@@ -20,5 +20,5 @@ body {
 }
 
 .tiptap {
-  @apply prose-sm prose-img:max-h-[400px] m-3 max-w-none focus:outline-none;
+  @apply prose-sm prose-img:max-h-[400px] p-3 max-w-none focus:outline-none;
 }
