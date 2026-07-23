@@ -1,13 +1,13 @@
 'use client';
 
+import { savePost } from '@/actions';
 import { Post } from '@/app/generated/prisma/client';
 import type { Editor } from '@tiptap/react';
 import { deleteCookie } from 'cookies-next/client';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { publishPost } from '@/actions/post/publish-post';
 import { getMediaKeys, getTextEditorContent } from '../utils';
 
 type PostSummaryProps = {
@@ -34,7 +34,7 @@ const PostSummary = ({ editor, post }: PostSummaryProps) => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
-    const resp = await publishPost(
+    const resp = await savePost(
       post?.id ?? '',
       data.title,
       getTextEditorContent(editor),
@@ -53,7 +53,6 @@ const PostSummary = ({ editor, post }: PostSummaryProps) => {
 
   const syncTitleFromEditor = () => {
     let found = false;
-
     editor.state.doc.descendants(node => {
       if (found) return false; // no seguir bajando en el nodo
       if (node.type.name === 'heading' && node.attrs.level === 1) {

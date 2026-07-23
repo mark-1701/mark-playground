@@ -7,12 +7,8 @@ import { toast } from 'react-toastify';
 import { checkDraftPost } from '@/actions/post/check-draft-post';
 import { initialPostData } from '../data/initialPostData';
 
-
-
 const CreatePostButton = () => {
   const router = useRouter();
-
-
 
   // todo: bloquear botón cuando se esta haciendo una consulta
   // const [isCreating, setIsCreating] = useState(false);

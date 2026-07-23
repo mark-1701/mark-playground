@@ -14,26 +14,30 @@ datasource db {
 
 enum PostStatus {
   DRAFT
+  PRIVATE
   PUBLISHED
   ARCHIVED
 }
 
 enum MediaStatus {
-  DRAFT
   ATTACHED
+  DRAFT
+  PRIVATE
+  PUBLIC
   ORPHAN
-  DELETED
 }
 
 model Post {
   id          String     @id @default(uuid())
   status      PostStatus @default(DRAFT)
-  title       String?    @default("untitled")
+  title       String?
   slug        String?    @unique
   content     Json?
   publishedAt DateTime?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   medias Media[]
 }

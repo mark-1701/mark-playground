@@ -1,10 +1,11 @@
 'use server';
 
+import { PostStatus } from '@/app/generated/prisma/enums';
 import prisma from '@/lib/prisma';
 import { ActionResult } from '@/types';
 import { mediaStatusOperations } from '../media/media-status-operations';
 
-export const publishPost = async (
+export const savePost = async (
   postId: string,
   title: string,
   content: string,
@@ -19,7 +20,7 @@ export const publishPost = async (
         data: {
           title,
           content,
-          status: 'PUBLISHED'
+          status: PostStatus.PUBLISHED
         }
       }),
       ...mediaStatusOperations(postId, mediakeys)

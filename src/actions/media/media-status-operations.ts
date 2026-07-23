@@ -9,7 +9,9 @@ export const mediaStatusOperations = (postId: string, keys: string[]) => [
     data: { status: MediaStatus.ATTACHED }
   }),
   prisma.media.updateMany({
-    where: { r2Key: { notIn: keys } },
+    where: {
+      AND: [{ r2Key: { notIn: keys } }, { postId }]
+    },
     data: { status: MediaStatus.ORPHAN }
   })
 ];

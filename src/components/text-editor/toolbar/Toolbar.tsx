@@ -26,22 +26,20 @@ export const ToolBar = ({
   const editorState = useToolbarState(editor);
 
   return (
-    <>
-      <div className="flex overflow-hidden border-b-2 border-b-gray-300 p-2 ">
-        <div className="flex divide-x divide-gray-200">
-          {tools.map(Tool => (
-            <ToolBarGroup key={Tool.name}>
-              <Tool
-                editor={editor}
-                toolbarState={editorState}
-                iconSize={18}
-                onInsertImage={onInsertImage}
-                isUploadingImage={isUploadingImage}
-              />
-            </ToolBarGroup>
-          ))}
-        </div>
+    <div className="flex overflow-hidden border-b-2 border-b-gray-300 p-1">
+      <div className="flex divide-x divide-gray-200">
+        {tools.map(Tool => (
+          <ToolBarGroup key={Tool.name}>
+            <Tool
+              editor={editor}
+              toolbarState={editorState}
+              iconSize={18}
+              onInsertImage={onInsertImage}
+              isUploadingImage={isUploadingImage}
+            />
+          </ToolBarGroup>
+        ))}
       </div>
-    </>
+    </div>
   );
 };

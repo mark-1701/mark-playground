@@ -7,6 +7,9 @@ import { ActionResult } from '@/types';
 export const getPosts = async (): Promise<ActionResult<Post[]>> => {
   try {
     const posts = await prisma.post.findMany({
+      where: {
+        deletedAt: null
+      },
       orderBy: {
         createdAt: 'asc'
       }
