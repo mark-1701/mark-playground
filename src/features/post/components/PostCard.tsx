@@ -1,7 +1,7 @@
 'use client';
 
 import { deletePost } from '@/actions';
-import { deleteCookie, getCookie, setCookie } from 'cookies-next/client';
+import { usePostStore } from '@/stores/post-store';
 import { useRouter } from 'next/navigation';
 import { GoTrash } from 'react-icons/go';
 import { toast } from 'react-toastify';
@@ -14,8 +14,11 @@ type PostCardProps = {
 const PostCard = ({ id, title }: PostCardProps) => {
   const router = useRouter();
 
+  const postDraftId = usePostStore(state => state.postDraftId);
+  const setPostDraftId = usePostStore(state => state.setPostDraftId);
+
   const handleRedirection = (draftId: string) => {
-    setCookie('post:draftId', draftId);
+    setPostDraftId(draftId);
     router.push('/dashboard/posts/new');
   };
 
@@ -27,9 +30,8 @@ const PostCard = ({ id, title }: PostCardProps) => {
       return;
     }
 
-    const draftId = getCookie('post:draftId');
-    if (draftId === id) deleteCookie('post:draftId');
-    
+    if (postDraftId === id) setPostDraftId(null);
+
     router.refresh();
   };
 

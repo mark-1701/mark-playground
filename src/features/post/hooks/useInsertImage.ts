@@ -1,10 +1,10 @@
 'use client';
 
 import { registerMedia, updateMediaUrl } from '@/actions';
+import { usePostStore } from '@/stores/post-store';
 import { ActionResult } from '@/types';
 import { generateImageKey } from '@/utils';
 import type { Editor } from '@tiptap/core';
-import { getCookie } from 'cookies-next/client';
 import { useState } from 'react';
 import { uploadImageToStorage } from '@/services/storage/r2';
 
@@ -12,6 +12,8 @@ import { uploadImageToStorage } from '@/services/storage/r2';
 // todo: insertar una imagen temporal (spinner de carga)
 
 export const useInsertImage = () => {
+  const postDraftId = usePostStore(state => state.postDraftId);
+
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
@@ -22,10 +24,9 @@ export const useInsertImage = () => {
   ): Promise<ActionResult<null>> => {
     const key = generateImageKey(file.name);
     const insertPos = position ?? editor.state.selection.anchor;
-    const postId = getCookie('post:draftId');
 
     // validar datos
-    if (!postId) {
+    if (!postDraftId) {
       return {
         ok: false,
         message: 'Cookie no encontrada'
@@ -35,7 +36,7 @@ export const useInsertImage = () => {
     setIsUploadingImage(true);
     try {
       // 1. registrar media
-      const media = await registerMedia(postId, key);
+      const media = await registerMedia(postDraftId, key);
       if (!media.ok) throw new Error('No se pudo registrar la imagen');
 
       // 2. guardar imagen el en storage

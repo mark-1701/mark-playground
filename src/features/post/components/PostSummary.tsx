@@ -3,12 +3,12 @@
 import { savePost } from '@/actions';
 import { Post } from '@/app/generated/prisma/client';
 import type { Editor } from '@tiptap/react';
-import { deleteCookie } from 'cookies-next/client';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { getMediaKeys, getTextEditorContent } from '../utils';
+import { usePostStore } from '@/stores/post-store';
 
 type PostSummaryProps = {
   editor: Editor;
@@ -22,6 +22,10 @@ type Inputs = {
 const PostSummary = ({ editor, post }: PostSummaryProps) => {
   const router = useRouter();
   const isNewPost = post?.status === 'DRAFT';
+
+    const setPostDraftId = usePostStore(state => state.setPostDraftId);
+
+  
 
   // todo: bloquear el botón cuando se esta haciendo la consulta
   // const [isSaving, setIsSaving] = useState(false);
@@ -46,7 +50,7 @@ const PostSummary = ({ editor, post }: PostSummaryProps) => {
       return;
     }
 
-    deleteCookie('post:draftId');
+    setPostDraftId(null)
     toast.success('Artículo guardado con éxito');
     router.push('/dashboard/posts');
   };

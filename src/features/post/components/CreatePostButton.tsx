@@ -2,7 +2,6 @@
 
 import { createPost } from '@/actions';
 import { usePostStore } from '@/stores/post-store';
-import { setCookie } from 'cookies-next/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -17,7 +16,7 @@ const CreatePostButton = () => {
   const [visible, setVisible] = useState(false);
   const [draftPostId, setDraftPostId] = useState<string | null>(null);
 
-  const postDraftId = usePostStore(state => state.postDraftId);
+  const setPostDraftId = usePostStore(state => state.setPostDraftId);
 
   // todo: bloquear botón cuando se esta haciendo una consulta
   // const [isCreating, setIsCreating] = useState(false);
@@ -82,7 +81,7 @@ const CreatePostButton = () => {
   };
 
   const openPost = (postId: string) => {
-    setCookie('post:draftId', postId);
+    setPostDraftId(postId);
     router.push('/dashboard/posts/new');
   };
 
