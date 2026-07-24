@@ -46,7 +46,7 @@ const PostCard = ({ id, title }: PostCardProps) => {
           hover:cursor-pointer"
         onClick={() => handleDelete(id)}
       >
-        <GoTrash size={22} className="" />
+        <GoTrash size={18} className="" />
       </button>
     </li>
   );

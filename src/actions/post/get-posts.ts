@@ -1,6 +1,6 @@
 'use server';
 
-import { Post } from '@/app/generated/prisma/client';
+import { Post, PostStatus } from '@/app/generated/prisma/client';
 import prisma from '@/lib/prisma';
 import { ActionResult } from '@/types';
 
@@ -8,10 +8,14 @@ export const getPosts = async (): Promise<ActionResult<Post[]>> => {
   try {
     const posts = await prisma.post.findMany({
       where: {
-        deletedAt: null
+        AND: [
+          // como decir que no incluya los que tienen estatus draft?
+          { status: { not: PostStatus.DRAFT } },
+          { deletedAt: null }
+        ]
       },
       orderBy: {
-        createdAt: 'asc'
+        createdAt: 'desc'
       }
     });
 

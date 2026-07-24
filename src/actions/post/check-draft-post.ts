@@ -9,9 +9,9 @@ export const checkDraftPost = async (): Promise<
   try {
     const post = await prisma.post.findFirst({
       where: {
-        status: 'DRAFT'
+        AND: [{ status: 'DRAFT' }, { deletedAt: null }]
       }
-    }); 
+    });
 
     return {
       ok: true,
