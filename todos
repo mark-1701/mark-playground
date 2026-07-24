@@ -1,4 +1,8 @@
 - tengo que revisar si los deletes funcionan correctamente
+- agregar campos faltantes para guardar un post (states)
+- guardar en caché los cambios el último borrador
+- cuando se modifica un post guardado también se vuelve en un borrador. 
+- ¿Los borradores podrían listarse también? 
 - crear los mensajes dialog modales faltantes
 - programar el cronjob que elimina las imágenes huerfanas.
 - autenticación

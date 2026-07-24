@@ -1,6 +1,7 @@
 'use client';
 
 import { createPost } from '@/actions';
+import { usePostStore } from '@/stores/post-store';
 import { setCookie } from 'cookies-next/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -15,6 +16,8 @@ const CreatePostButton = () => {
 
   const [visible, setVisible] = useState(false);
   const [draftPostId, setDraftPostId] = useState<string | null>(null);
+
+  const postDraftId = usePostStore(state => state.postDraftId);
 
   // todo: bloquear botón cuando se esta haciendo una consulta
   // const [isCreating, setIsCreating] = useState(false);
@@ -116,7 +119,7 @@ const CreatePostButton = () => {
         footer={footerContent}
         onHide={() => setVisible(false)}
       >
-        Se encontró un artículo anterior no terminado, ¿Quieres continuar
+        Se encontró un artículo anterior no terminado, ¿Deseas continuar
         editandolo?
       </Dialog>
     </div>
