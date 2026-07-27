@@ -5,23 +5,13 @@ import type { HandleInsertImage } from './types';
 
 type TextEditorProps = {
   editor: Editor;
-  onInsertImage: HandleInsertImage;
-  isUploadingImage: boolean;
 };
 
-export const TextEditor = ({
-  editor,
-  onInsertImage,
-  isUploadingImage
-}: TextEditorProps) => {
+export const TextEditor = ({ editor }: TextEditorProps) => {
   return (
     <div className="flex h-full flex-col rounded-md border border-gray-300">
-      <ToolBar
-        editor={editor}
-        onInsertImage={onInsertImage}
-        isUploadingImage={isUploadingImage}
-      />
-      <div className="overflow-auto flex-1">
+      <ToolBar editor={editor} />
+      <div className="flex-1 overflow-auto">
         <EditorContent editor={editor} />
       </div>
     </div>

@@ -2,17 +2,17 @@
 
 import { savePost } from '@/actions';
 import { Post } from '@/app/generated/prisma/client';
-import type { Editor } from '@tiptap/react';
+import { usePostStore } from '@/stores/post-store';
+import { type Editor } from '@tiptap/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { getMediaKeys, getTextEditorContent } from '../utils';
-import { usePostStore } from '@/stores/post-store';
+import { getMediaKeys, getContent } from '../utils';
 
 type PostSummaryProps = {
   editor: Editor;
-  post: Post | null;
+  post: Post;
 };
 
 type Inputs = {
@@ -21,11 +21,12 @@ type Inputs = {
 
 const PostSummary = ({ editor, post }: PostSummaryProps) => {
   const router = useRouter();
-  const isNewPost = post?.status === 'DRAFT';
-
-    const setPostDraftId = usePostStore(state => state.setPostDraftId);
-
   
+  const setPostDraftId = usePostStore(state => state.setPostDraftId);
+  const title = usePostStore(state => state.title);
+  const setTitle = usePostStore(state => state.setTitle);
+  
+  const isNewPost = post?.status === 'DRAFT';
 
   // todo: bloquear el botón cuando se esta haciendo la consulta
   // const [isSaving, setIsSaving] = useState(false);
@@ -39,9 +40,9 @@ const PostSummary = ({ editor, post }: PostSummaryProps) => {
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     const resp = await savePost(
-      post?.id ?? '',
+      post.id,
       data.title,
-      getTextEditorContent(editor),
+      getContent(editor),
       getMediaKeys(editor)
     );
 
@@ -50,32 +51,14 @@ const PostSummary = ({ editor, post }: PostSummaryProps) => {
       return;
     }
 
-    setPostDraftId(null)
+    setPostDraftId(null);
     toast.success('Artículo guardado con éxito');
     router.push('/dashboard/posts');
   };
 
-  const syncTitleFromEditor = () => {
-    let found = false;
-    editor.state.doc.descendants(node => {
-      if (found) return false; // no seguir bajando en el nodo
-      if (node.type.name === 'heading' && node.attrs.level === 1) {
-        if (node.textContent.trim().length > 0)
-          setValue('title', node.textContent.trim());
-        found = true;
-        return false;
-      }
-    });
-  };
-
   useEffect(() => {
-    const onUpdate = syncTitleFromEditor;
-    onUpdate();
-    editor.on('update', onUpdate);
-    return () => {
-      editor.off('update', onUpdate);
-    };
-  }, [editor]);
+    setValue('title', title);
+  }, [title, setValue]);
 
   const { onBlur: onTitleBlur, ...titleField } = register('title', {
     required: true
@@ -96,7 +79,7 @@ const PostSummary = ({ editor, post }: PostSummaryProps) => {
               {...titleField}
               onBlur={e => {
                 onTitleBlur(e); // onBlur react-hook-form
-                syncTitleFromEditor(); // tu lógica extra
+                setTitle(e.target.value);
               }}
               className="mb-1 w-full rounded border border-gray-300 p-1"
             />
@@ -107,7 +90,7 @@ const PostSummary = ({ editor, post }: PostSummaryProps) => {
             )}
           </div>
 
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label htmlFor="miniatura" className="mb-2 block font-medium">
               Miniatura
             </label>
@@ -117,7 +100,7 @@ const PostSummary = ({ editor, post }: PostSummaryProps) => {
               id="miniatura"
               className="file:cursor-pointer file:bg-gray-200 file:p-0.5"
             />
-          </div>
+          </div> */}
         </div>
 
         <input

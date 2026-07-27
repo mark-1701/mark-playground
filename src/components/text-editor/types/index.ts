@@ -37,8 +37,6 @@ export type ToolProps = {
   editor: Editor;
   toolbarState: ToolbarState;
   iconSize: number;
-  onInsertImage: HandleInsertImage;
-  isUploadingImage: boolean;
 };
 
 export type InsertImage = (

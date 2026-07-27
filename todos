@@ -8,6 +8,9 @@
 - autenticación
 - seo de Next.js
 
+- cuando se abre el dialog que verifica el último post borrador, borra el state
+ del anterior post que se estaba editando. Para el state podría haber una 
+ especie de array que contenga todos los borradores
 
         <div className="mb-4">
           <label htmlFor="slug" className="mb-2 block font-medium">

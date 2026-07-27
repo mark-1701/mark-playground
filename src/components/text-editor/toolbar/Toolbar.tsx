@@ -14,15 +14,9 @@ const tools = [UndoRedo, Marks, Headings, Lists, TextAlign, Links, InsertImage];
 
 type ToolbarProps = {
   editor: Editor;
-  onInsertImage: HandleInsertImage;
-  isUploadingImage: boolean;
 };
 
-export const ToolBar = ({
-  editor,
-  onInsertImage,
-  isUploadingImage
-}: ToolbarProps) => {
+export const ToolBar = ({ editor }: ToolbarProps) => {
   const editorState = useToolbarState(editor);
 
   return (
@@ -34,8 +28,6 @@ export const ToolBar = ({
               editor={editor}
               toolbarState={editorState}
               iconSize={18}
-              onInsertImage={onInsertImage}
-              isUploadingImage={isUploadingImage}
             />
           </ToolBarGroup>
         ))}

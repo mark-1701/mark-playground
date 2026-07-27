@@ -12,14 +12,16 @@ import { initialPostData } from '../data/initialPostData';
 
 const CreatePostButton = () => {
   const router = useRouter();
+  
+  const setDraftId = usePostStore(state => state.setDraftId);
 
   const [visible, setVisible] = useState(false);
-  const [draftPostId, setDraftPostId] = useState<string | null>(null);
-
-  const setPostDraftId = usePostStore(state => state.setPostDraftId);
+  const [currentPostId, setCurrentPostId] = useState<string | null>(null);
 
   // todo: bloquear botón cuando se esta haciendo una consulta
   // const [isCreating, setIsCreating] = useState(false);
+
+  // * handler del botón
 
   const handleCheckDraftPost = async () => {
     const resp = await checkDraftPost();
@@ -30,7 +32,7 @@ const CreatePostButton = () => {
     }
 
     if (resp.data) {
-      setDraftPostId(resp.data);
+      setCurrentPostId(resp.data);
       setVisible(true);
       return;
     }
@@ -38,18 +40,20 @@ const CreatePostButton = () => {
     createNewPost();
   };
 
-  const handleContinueDraft = () => {
-    if (!draftPostId) return;
+  // * hanlders de los botones footer del dialog
+
+  const continueDraft = () => {
+    if (!currentPostId) return;
     setVisible(false);
-    openPost(draftPostId);
+    openPost(currentPostId);
   };
 
-  const handleDiscardDraft = async () => {
-    if (!draftPostId) return;
+  const discardDraft = async () => {
+    if (!currentPostId) return;
     setVisible(false);
 
     const resp = await replaceDraftPost(
-      draftPostId,
+      currentPostId,
       initialPostData.title,
       initialPostData.content
     );
@@ -63,6 +67,8 @@ const CreatePostButton = () => {
 
     openPost(resp.data);
   };
+
+  // * otras funcionas
 
   const createNewPost = async () => {
     const resp = await createPost(
@@ -81,7 +87,7 @@ const CreatePostButton = () => {
   };
 
   const openPost = (postId: string) => {
-    setPostDraftId(postId);
+    setDraftId(postId);
     router.push('/dashboard/posts/new');
   };
 
@@ -90,13 +96,13 @@ const CreatePostButton = () => {
       <button
         className="rounded border border-gray-300 p-2 text-gray-500
           hover:cursor-pointer"
-        onClick={handleDiscardDraft}
+        onClick={discardDraft}
       >
         Descartar
       </button>
       <button
         className="rounded bg-blue-500 p-2 text-white hover:cursor-pointer"
-        onClick={handleContinueDraft}
+        onClick={continueDraft}
       >
         Aceptar
       </button>
@@ -113,13 +119,13 @@ const CreatePostButton = () => {
       </button>
 
       <Dialog
-        header="Crear nuevo artículo"
+        header="Continuar con el borrador"
         visible={visible}
         footer={footerContent}
         onHide={() => setVisible(false)}
       >
-        Se encontró un artículo anterior no terminado, ¿Deseas continuar
-        editandolo?
+        Se encontró un artículo anterior no terminado, <br />
+        ¿Deseas continuar editandolo?
       </Dialog>
     </div>
   );

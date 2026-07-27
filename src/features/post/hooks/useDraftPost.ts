@@ -9,10 +9,12 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { initialPostData } from '../data/initialPostData';
 
-export const useDraftPost = (editor: Editor | null) => {
+export const useLoadDraftPost = (editor: Editor | null) => {
   const router = useRouter();
 
-  const postDraftId = usePostStore(state => state.postDraftId);
+  const draftId = usePostStore(state => state.draftId);
+
+  const setDraftPost = usePostStore(state => state.setPost);
 
   const [post, setPost] = useState<Post | null>(null);
 
@@ -20,11 +22,9 @@ export const useDraftPost = (editor: Editor | null) => {
     if (!editor) return;
 
     const loadPost = async () => {
-      const postId = postDraftId ?? '';
+      const resp = await getPostById(draftId);
 
-      const postResp = await getPostById(postId);
-
-      if (!postResp.ok) {
+      if (!resp.ok) {
         toast.error('No se encontró el post', {
           toastId: 'missing-post-id'
         });
@@ -32,17 +32,18 @@ export const useDraftPost = (editor: Editor | null) => {
         return;
       }
 
-      setPost(postResp.data);
+      setPost(resp.data);
 
+      setDraftPost(resp.data);
+
+      // todo esto puede cambiar en el tiempo, suponte que si pueden haber posts que estan vacíos
       editor?.commands.setContent(
-        (postResp.data.content as Content) ?? initialPostData.content
+        (resp.data.content as Content) ?? initialPostData.content
       );
     };
 
     loadPost();
   }, [editor, router]);
 
-  return {
-    post
-  };
+  return post;
 };

@@ -13,12 +13,11 @@ type PostCardProps = {
 
 const PostCard = ({ id, title }: PostCardProps) => {
   const router = useRouter();
-
-  const postDraftId = usePostStore(state => state.postDraftId);
-  const setPostDraftId = usePostStore(state => state.setPostDraftId);
+  const draftId = usePostStore(state => state.draftId);
+  const setDraftId = usePostStore(state => state.setDraftId);
 
   const handleRedirection = (draftId: string) => {
-    setPostDraftId(draftId);
+    setDraftId(draftId);
     router.push('/dashboard/posts/new');
   };
 
@@ -30,7 +29,7 @@ const PostCard = ({ id, title }: PostCardProps) => {
       return;
     }
 
-    if (postDraftId === id) setPostDraftId(null);
+    if (draftId === id) setDraftId('');
 
     router.refresh();
   };

@@ -13,7 +13,6 @@ import { uploadImageToStorage } from '@/services/storage/r2';
 
 export const useInsertImage = () => {
   const postDraftId = usePostStore(state => state.postDraftId);
-
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
