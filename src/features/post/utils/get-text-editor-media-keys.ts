@@ -1,6 +1,6 @@
 import type { Editor } from '@tiptap/core';
 
-export const getMediaKeys = (editor: Editor) => {
+export const getTextEditorMediaKeys = (editor: Editor) => {
   const mediaKeys = new Set<string>();
 
   editor.state.doc.descendants(node => {

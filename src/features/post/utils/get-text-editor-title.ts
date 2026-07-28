@@ -1,6 +1,6 @@
 import { Node } from 'prosemirror-model';
 
-export const getTitle = (doc: Node) => {
+export const getTextEditorTitle = (doc: Node, manualTitle?: string) => {
   let result: string | null = null;
   try {
     doc.descendants(node => {
@@ -10,5 +10,5 @@ export const getTitle = (doc: Node) => {
       }
     });
   } catch {}
-  return result;
+  return result || manualTitle || '';
 };
