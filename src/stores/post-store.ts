@@ -1,12 +1,14 @@
-import { Post } from '@/app/generated/prisma/client';
+import type { Post } from '@/app/generated/prisma/client';
+import type { PostStatus } from '@/app/generated/prisma/client';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 type PostState = {
-  draftId: string;
+  id: string;
   title: string | null;
   content: any;
-  setDraftId: (draftId: string) => void;
+  status: PostStatus;
+  setId: (id: string) => void;
   setTitle: (title: string | null) => void;
   setContent: (content: any) => void;
   setPost: (post: Post) => void;
@@ -15,13 +17,20 @@ type PostState = {
 export const usePostStore = create<PostState>()(
   persist(
     set => ({
-      draftId: '',
-      title: '',
+      id: '',
+      title: null,
       content: null,
-      setDraftId: draftId => set({ draftId }),
-      setTitle: title => set(state => (title ? { title } : state)),
+      status: 'DRAFT',
+      setId: id => set({ id }),
+      setTitle: title => set({ title }),
       setContent: content => set({ content }),
-      setPost: post => set({ title: post.title, content: post.content })
+      setPost: post =>
+        set({
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          status: post.status
+        })
     }),
     {
       name: 'post-store'

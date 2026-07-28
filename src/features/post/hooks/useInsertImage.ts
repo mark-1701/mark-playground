@@ -12,7 +12,7 @@ import { uploadImageToStorage } from '@/services/storage/r2';
 // todo: insertar una imagen temporal (spinner de carga)
 
 export const useInsertImage = () => {
-  const postDraftId = usePostStore(state => state.postDraftId);
+  const id = usePostStore(state => state.id);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
@@ -25,7 +25,7 @@ export const useInsertImage = () => {
     const insertPos = position ?? editor.state.selection.anchor;
 
     // validar datos
-    if (!postDraftId) {
+    if (!id) {
       return {
         ok: false,
         message: 'Cookie no encontrada'
@@ -35,7 +35,7 @@ export const useInsertImage = () => {
     setIsUploadingImage(true);
     try {
       // 1. registrar media
-      const media = await registerMedia(postDraftId, key);
+      const media = await registerMedia(id, key);
       if (!media.ok) throw new Error('No se pudo registrar la imagen');
 
       // 2. guardar imagen el en storage

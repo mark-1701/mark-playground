@@ -1,7 +1,6 @@
 'use client';
 
 import { deletePost } from '@/actions';
-import { usePostStore } from '@/stores/post-store';
 import { useRouter } from 'next/navigation';
 import { GoTrash } from 'react-icons/go';
 import { toast } from 'react-toastify';
@@ -13,12 +12,10 @@ type PostCardProps = {
 
 const PostCard = ({ id, title }: PostCardProps) => {
   const router = useRouter();
-  const draftId = usePostStore(state => state.draftId);
-  const setDraftId = usePostStore(state => state.setDraftId);
 
-  const handleRedirection = (draftId: string) => {
-    setDraftId(draftId);
-    router.push('/dashboard/posts/new');
+  const handleRedirection = (postId: string) => {
+    const params = new URLSearchParams({ postId });
+    router.push(`/dashboard/posts/new?${params.toString()}`);
   };
 
   const handleDelete = async (id: string) => {
@@ -28,8 +25,6 @@ const PostCard = ({ id, title }: PostCardProps) => {
       toast.error('Ocurrió un error tratando de eliminar el post');
       return;
     }
-
-    if (draftId === id) setDraftId('');
 
     router.refresh();
   };

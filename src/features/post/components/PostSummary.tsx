@@ -1,35 +1,31 @@
 'use client';
 
 import { savePost } from '@/actions';
-import { Post } from '@/app/generated/prisma/client';
 import { usePostStore } from '@/stores/post-store';
 import { type Editor } from '@tiptap/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { getMediaKeys, getContent } from '../utils';
-
-type PostSummaryProps = {
-  editor: Editor;
-  post: Post;
-};
+import { getContent, getMediaKeys } from '../utils';
+import { getTitle } from '../utils/get-title';
 
 type Inputs = {
   title: string;
 };
 
-const PostSummary = ({ editor, post }: PostSummaryProps) => {
+type PostSummaryProps = {
+  editor: Editor;
+};
+
+const PostSummary = ({ editor }: PostSummaryProps) => {
   const router = useRouter();
-  
-  const setPostDraftId = usePostStore(state => state.setPostDraftId);
+
+  const postId = usePostStore(state => state.id);
   const title = usePostStore(state => state.title);
   const setTitle = usePostStore(state => state.setTitle);
-  
-  const isNewPost = post?.status === 'DRAFT';
 
-  // todo: bloquear el botón cuando se esta haciendo la consulta
-  // const [isSaving, setIsSaving] = useState(false);
+  const isNewPost = usePostStore(state => state.status) === 'DRAFT';
 
   const {
     register,
@@ -40,7 +36,7 @@ const PostSummary = ({ editor, post }: PostSummaryProps) => {
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     const resp = await savePost(
-      post.id,
+      postId,
       data.title,
       getContent(editor),
       getMediaKeys(editor)
@@ -51,14 +47,15 @@ const PostSummary = ({ editor, post }: PostSummaryProps) => {
       return;
     }
 
-    setPostDraftId(null);
     toast.success('Artículo guardado con éxito');
     router.push('/dashboard/posts');
   };
 
+  // guardar title en zustand
   useEffect(() => {
-    setValue('title', title);
-  }, [title, setValue]);
+    setTitle(getTitle(editor.state.doc));
+    setValue('title', title ?? '');
+  }, [title, editor, setValue]);
 
   const { onBlur: onTitleBlur, ...titleField } = register('title', {
     required: true
@@ -78,7 +75,7 @@ const PostSummary = ({ editor, post }: PostSummaryProps) => {
             <input
               {...titleField}
               onBlur={e => {
-                onTitleBlur(e); // onBlur react-hook-form
+                onTitleBlur(e);
                 setTitle(e.target.value);
               }}
               className="mb-1 w-full rounded border border-gray-300 p-1"
@@ -117,3 +114,6 @@ const PostSummary = ({ editor, post }: PostSummaryProps) => {
 };
 
 export default PostSummary;
+
+// todo: bloquear el botón cuando se esta haciendo la consulta
+// const [isSaving, setIsSaving] = useState(false);

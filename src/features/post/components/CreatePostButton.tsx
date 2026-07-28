@@ -1,7 +1,6 @@
 'use client';
 
 import { createPost } from '@/actions';
-import { usePostStore } from '@/stores/post-store';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -12,14 +11,8 @@ import { initialPostData } from '../data/initialPostData';
 
 const CreatePostButton = () => {
   const router = useRouter();
-  
-  const setDraftId = usePostStore(state => state.setDraftId);
-
   const [visible, setVisible] = useState(false);
   const [currentPostId, setCurrentPostId] = useState<string | null>(null);
-
-  // todo: bloquear botón cuando se esta haciendo una consulta
-  // const [isCreating, setIsCreating] = useState(false);
 
   // * handler del botón
 
@@ -87,8 +80,8 @@ const CreatePostButton = () => {
   };
 
   const openPost = (postId: string) => {
-    setDraftId(postId);
-    router.push('/dashboard/posts/new');
+    const params = new URLSearchParams({ postId });
+    router.push(`/dashboard/posts/new?${params.toString()}`);
   };
 
   const footerContent = (
@@ -132,3 +125,6 @@ const CreatePostButton = () => {
 };
 
 export default CreatePostButton;
+
+// todo: bloquear botón cuando se esta haciendo una consulta
+// const [isCreating, setIsCreating] = useState(false);
