@@ -10,7 +10,7 @@ const DashboardPage = async () => {
   return (
     <div className="mx-auto flex h-full w-[700px] flex-col gap-8 pt-12">
       <div className="flex justify-between">
-        <h1 className="text-3xl font-bold">Gestión de posts</h1>
+        <h1 className="text-3xl font-bold">Gestión de artículos</h1>
         <CreatePostButton />
       </div>
 

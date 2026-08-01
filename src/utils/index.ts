@@ -1,4 +1,3 @@
 export * from './cn';
-export * from './generateImageKey';
+export * from './generate-image-key';
 export * from './create-html';
-export * from './serialize-tiptap-content';

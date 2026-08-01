@@ -22,9 +22,8 @@ export type PostStatus = (typeof PostStatus)[keyof typeof PostStatus]
 export const MediaStatus = {
   ATTACHED: 'ATTACHED',
   DRAFT: 'DRAFT',
-  PRIVATE: 'PRIVATE',
-  PUBLIC: 'PUBLIC',
-  ORPHAN: 'ORPHAN'
+  ORPHAN: 'ORPHAN',
+  DELETED: 'DELETED'
 } as const
 
 export type MediaStatus = (typeof MediaStatus)[keyof typeof MediaStatus]

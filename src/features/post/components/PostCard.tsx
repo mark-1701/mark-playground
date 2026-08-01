@@ -15,7 +15,7 @@ const PostCard = ({ id, title }: PostCardProps) => {
 
   const handleRedirection = (postId: string) => {
     const params = new URLSearchParams({ postId });
-    router.push(`/dashboard/posts/new?${params.toString()}`);
+    router.push(`/dashboard/posts/edit?${params.toString()}`);
   };
 
   const handleDelete = async (id: string) => {

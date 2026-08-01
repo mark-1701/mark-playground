@@ -1,9 +1,11 @@
 'use client';
 
 import PostSummary from '@/features/post/components/PostSummary';
-import { useLoadDraftPost } from '@/features/post/hooks/useDraftPost';
-import { getContent } from '@/features/post/utils';
-import { getTitle } from '@/features/post/utils/get-title';
+import { useLoadDraftPost } from '@/features/post/hooks/useLoadPost';
+import {
+  getTextEditorContent,
+  getTextEditorTitle
+} from '@/features/post/utils';
 import { usePostStore } from '@/stores/post-store';
 import { useEditor } from '@tiptap/react';
 import { useSearchParams } from 'next/navigation';
@@ -14,9 +16,8 @@ import { getExtensions } from '@/components/text-editor/config';
 const EditPostPage = () => {
   const searchParams = useSearchParams();
   const postId = searchParams.get('postId') ?? '';
-  
-  const setContent = usePostStore(state => state.setContent);
-  const setTitle = usePostStore(state => state.setTitle);
+  const setDraftContent = usePostStore(state => state.setContent);
+  const setDraftTitle = usePostStore(state => state.setTitle);
 
   const editor = useEditor({
     extensions: getExtensions(),
@@ -24,16 +25,16 @@ const EditPostPage = () => {
     immediatelyRender: false
   });
 
-  // cargar post borrador
+  // cargar post como borrador
   useLoadDraftPost(editor, postId);
 
-  // guardar title y content en zustand
+  // guardar cambios de content y title en zustand
   useEffect(() => {
     if (!editor) return;
 
     const onUpdate = () => {
-      setContent(getContent(editor));
-      setTitle(getTitle(editor.state.doc));
+      setDraftContent(getTextEditorContent(editor));
+      setDraftTitle(getTextEditorTitle(editor.state.doc));
     };
 
     editor.on('update', onUpdate);
@@ -41,7 +42,7 @@ const EditPostPage = () => {
     return () => {
       editor?.off('update', onUpdate);
     };
-  }, [editor, setContent, setTitle]);
+  }, [editor, setDraftContent, setDraftTitle]);
 
   if (!editor) return <p>loading...</p>;
 

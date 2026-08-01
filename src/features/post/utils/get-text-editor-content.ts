@@ -1,7 +1,9 @@
-import { serializeTextEditorContent } from '@/utils';
 import type { Editor } from '@tiptap/core';
 
-// todo estudiar que pasó aquí
 export const getTextEditorContent = (editor: Editor) => {
   return serializeTextEditorContent(editor.getJSON());
+};
+
+const serializeTextEditorContent = (content: any) => {
+  return JSON.parse(JSON.stringify(content));
 };

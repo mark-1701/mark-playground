@@ -3,28 +3,27 @@
 import { savePost } from '@/actions';
 import { usePostStore } from '@/stores/post-store';
 import { type Editor } from '@tiptap/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { getContent, getMediaKeys } from '../utils';
-import { getTitle } from '../utils/get-title';
+import {
+  getTextEditorContent,
+  getTextEditorMediaKeys,
+  getTextEditorTitle
+} from '../utils';
 
 type Inputs = {
   title: string;
 };
 
-type PostSummaryProps = {
-  editor: Editor;
-};
-
-const PostSummary = ({ editor }: PostSummaryProps) => {
+const PostSummary = ({ editor }: { editor: Editor }) => {
   const router = useRouter();
 
-  const postId = usePostStore(state => state.id);
-  const title = usePostStore(state => state.title);
-  const setTitle = usePostStore(state => state.setTitle);
-
+  // acceder al state de zustand del post en borrador
+  const draftPostId = usePostStore(state => state.id);
+  const draftPostTitle = usePostStore(state => state.title);
+  const setDraftPostTitle = usePostStore(state => state.setTitle);
   const isNewPost = usePostStore(state => state.status) === 'DRAFT';
 
   const {
@@ -36,10 +35,10 @@ const PostSummary = ({ editor }: PostSummaryProps) => {
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     const resp = await savePost(
-      postId,
+      draftPostId,
       data.title,
-      getContent(editor),
-      getMediaKeys(editor)
+      getTextEditorContent(editor),
+      getTextEditorMediaKeys(editor)
     );
 
     if (!resp.ok) {
@@ -51,21 +50,18 @@ const PostSummary = ({ editor }: PostSummaryProps) => {
     router.push('/dashboard/posts');
   };
 
-  // guardar title en zustand
-  useEffect(() => {
-    setTitle(getTitle(editor.state.doc));
-    setValue('title', title ?? '');
-  }, [title, editor, setValue]);
+  // cambiar el input title cuando ocurra un cambio en el state de title
+  useEffect(
+    () => setValue('title', draftPostTitle ?? ''),
+    [draftPostTitle, setValue]
+  );
 
   const { onBlur: onTitleBlur, ...titleField } = register('title', {
     required: true
   });
 
   return (
-    <div
-      className="w-90 gap-24 rounded-md border border-gray-300 bg-white p-4
-        px-4"
-    >
+    <div className="w-90 rounded-md border border-gray-300 bg-white p-4 px-4">
       <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <div className="mb-4">
@@ -76,7 +72,12 @@ const PostSummary = ({ editor }: PostSummaryProps) => {
               {...titleField}
               onBlur={e => {
                 onTitleBlur(e);
-                setTitle(e.target.value);
+                const resolvedTitle = getTextEditorTitle(
+                  editor.state.doc,
+                  e.target.value
+                );
+                setDraftPostTitle(resolvedTitle);
+                setValue('title', resolvedTitle);
               }}
               className="mb-1 w-full rounded border border-gray-300 p-1"
             />

@@ -18,7 +18,7 @@ export const usePostStore = create<PostState>()(
   persist(
     set => ({
       id: '',
-      title: null,
+      title: '',
       content: null,
       status: 'DRAFT',
       setId: id => set({ id }),

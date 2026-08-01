@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 
 export const useLoadDraftPost = (editor: Editor | null, postId: string) => {
   const router = useRouter();
-  const setPost = usePostStore(state => state.setPost);
+  const setDraftPost = usePostStore(state => state.setPost);
 
   useEffect(() => {
     if (!editor) return;
@@ -25,13 +25,14 @@ export const useLoadDraftPost = (editor: Editor | null, postId: string) => {
         return;
       }
 
-      setPost(resp.data);
+      // guardar post en zustand
+      setDraftPost(resp.data);
 
       editor.commands.setContent(resp.data.content as Content);
     };
 
     loadPost();
-  }, [editor, router]);
+  }, [editor, router, postId, setDraftPost]);
 };
 
 // ! posible eliminar

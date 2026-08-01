@@ -22,9 +22,8 @@ enum PostStatus {
 enum MediaStatus {
   ATTACHED
   DRAFT
-  PRIVATE
-  PUBLIC
   ORPHAN
+  DELETED
 }
 
 model Post {
