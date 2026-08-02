@@ -1,23 +1,16 @@
 'use client';
 
 import PostSummary from '@/features/post/components/PostSummary';
-import { useLoadDraftPost } from '@/features/post/hooks/useLoadPost';
-import {
-  getTextEditorContent,
-  getTextEditorTitle
-} from '@/features/post/utils';
-import { usePostStore } from '@/stores/post-store';
+import { useLoadDraftPost } from '@/features/post/hooks/useLoadDraftPost';
 import { useEditor } from '@tiptap/react';
 import { useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
 import { TextEditor } from '@/components/text-editor/TextEditor';
 import { getExtensions } from '@/components/text-editor/config';
+import { useSyncEditorToDraft } from '../hooks/useSyncEditorToDraft';
 
 const EditPostPage = () => {
   const searchParams = useSearchParams();
   const postId = searchParams.get('postId') ?? '';
-  const setDraftContent = usePostStore(state => state.setContent);
-  const setDraftTitle = usePostStore(state => state.setTitle);
 
   const editor = useEditor({
     extensions: getExtensions(),
@@ -25,24 +18,11 @@ const EditPostPage = () => {
     immediatelyRender: false
   });
 
-  // cargar post como borrador
+  // cargar borrador a zustand
   useLoadDraftPost(editor, postId);
 
-  // guardar cambios de content y title en zustand
-  useEffect(() => {
-    if (!editor) return;
-
-    const onUpdate = () => {
-      setDraftContent(getTextEditorContent(editor));
-      setDraftTitle(getTextEditorTitle(editor.state.doc));
-    };
-
-    editor.on('update', onUpdate);
-
-    return () => {
-      editor?.off('update', onUpdate);
-    };
-  }, [editor, setDraftContent, setDraftTitle]);
+  // sincronizar editor content con zustand
+  useSyncEditorToDraft(editor);
 
   if (!editor) return <p>loading...</p>;
 
