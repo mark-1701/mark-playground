@@ -6,8 +6,7 @@ import { useEffect } from 'react';
 import { getTextEditorContent, getTextEditorTitle } from '../utils';
 
 export const useSyncEditorToDraft = (editor: Editor | null) => {
-  const setDraftContent = usePostStore(state => state.setContent);
-  const setDraftTitle = usePostStore(state => state.setTitle);
+  const UpdateDraftPost = usePostStore(state => state.updatePost);
 
   // cualquier cambio en el editor
   // se guarda el content y title de zustand
@@ -15,8 +14,10 @@ export const useSyncEditorToDraft = (editor: Editor | null) => {
     if (!editor) return;
 
     const onUpdate = () => {
-      setDraftContent(getTextEditorContent(editor));
-      setDraftTitle(getTextEditorTitle(editor.state.doc));
+      UpdateDraftPost({
+        content: getTextEditorContent(editor),
+        title: getTextEditorTitle(editor.state.doc)
+      });
     };
 
     editor.on('update', onUpdate);
@@ -24,5 +25,5 @@ export const useSyncEditorToDraft = (editor: Editor | null) => {
     return () => {
       editor.off('update', onUpdate);
     };
-  }, [editor, setDraftContent, setDraftTitle]);
+  }, [editor, UpdateDraftPost]);
 };

@@ -21,21 +21,23 @@ const PostSummary = ({ editor }: { editor: Editor }) => {
   const router = useRouter();
 
   // acceder al state de zustand del post en borrador
-  const draftPostId = usePostStore(state => state.id);
-  const draftPostTitle = usePostStore(state => state.title);
-  const setDraftPostTitle = usePostStore(state => state.setTitle);
-  const isNewPost = usePostStore(state => state.status) === 'DRAFT';
+
+  const draftPost = usePostStore(state => state.post);
+  const updatePost = usePostStore(state => state.updatePost);
+  // const draftPostIsDirty = usePostStore(state => state.post.isDirty);
+  const isNewPost = usePostStore(state => state.post.status) === 'DRAFT';
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue
+    setValue,
+    reset
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     const resp = await savePost(
-      draftPostId,
+      draftPost.id,
       data.title,
       getTextEditorContent(editor),
       getTextEditorMediaKeys(editor)
@@ -52,13 +54,9 @@ const PostSummary = ({ editor }: { editor: Editor }) => {
 
   // cambiar el input title cuando ocurra un cambio en el state de title
   useEffect(
-    () => setValue('title', draftPostTitle ?? ''),
-    [draftPostTitle, setValue]
+    () => setValue('title', draftPost.title ?? ''),
+    [draftPost, setValue]
   );
-
-  const { onBlur: onTitleBlur, ...titleField } = register('title', {
-    required: true
-  });
 
   return (
     <div className="w-90 rounded-md border border-gray-300 bg-white p-4 px-4">
@@ -69,16 +67,7 @@ const PostSummary = ({ editor }: { editor: Editor }) => {
               Título
             </label>
             <input
-              {...titleField}
-              onBlur={e => {
-                onTitleBlur(e);
-                const resolvedTitle = getTextEditorTitle(
-                  editor.state.doc,
-                  e.target.value
-                );
-                setDraftPostTitle(resolvedTitle);
-                setValue('title', resolvedTitle);
-              }}
+              {...register('title', { required: true })}
               className="mb-1 w-full rounded border border-gray-300 p-1"
             />
             {errors.title && (
@@ -101,14 +90,23 @@ const PostSummary = ({ editor }: { editor: Editor }) => {
           </div> */}
         </div>
 
-        <input
-          type="submit"
-          className={`${
-            isNewPost ? 'bg-blue-500 text-white' : 'bg-yellow-300 text-black'
-          }
-            cursor-pointer self-end p-1 px-3 text-right disabled:bg-yellow-200`}
-          value={isNewPost ? 'Guardar' : 'Actualizar'}
-        />
+        <div className="flex justify-end gap-2">
+          <button
+            className="w-full bg-blue-500 p-1 text-white hover:cursor-pointer
+              disabled:invisible"
+            disabled={true}
+          >
+            Descartar cambios
+          </button>
+
+          <input
+            type="submit"
+            className={`${
+              isNewPost ? 'bg-blue-500 text-white' : 'bg-yellow-300 text-black'
+              } w-full cursor-pointer p-1 disabled:bg-yellow-200`}
+            value={isNewPost ? 'Guardar' : 'Actualizar'}
+          />
+        </div>
       </form>
     </div>
   );
