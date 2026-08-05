@@ -10,7 +10,7 @@ import { useSyncEditorToDraft } from '../hooks/useSyncEditorToDraft';
 
 const EditPostPage = () => {
   const searchParams = useSearchParams();
-  const postId = searchParams.get('postId') ?? '';
+  const postId = searchParams.get('postId');
 
   const editor = useEditor({
     extensions: getExtensions(),
@@ -18,13 +18,13 @@ const EditPostPage = () => {
     immediatelyRender: false
   });
 
-  // cargar borrador a zustand
+  // ? cargar post solicutado como borrador
   useLoadDraftPost(editor, postId);
 
-  // sincronizar editor content con zustand
-  useSyncEditorToDraft(editor);
+  // ? sincronizar content editor con el content del borrador cargado
+  useSyncEditorToDraft(editor, postId);
 
-  if (!editor) return <p>loading...</p>;
+  if (!editor || !postId) return <p>loading...</p>;
 
   return (
     <div className="flex h-full flex-col gap-8">
@@ -34,7 +34,7 @@ const EditPostPage = () => {
           <TextEditor editor={editor} />
         </div>
         <div>
-          <PostSummary editor={editor} />
+          <PostSummary editor={editor} postId={postId} />
         </div>
       </div>
     </div>

@@ -7,13 +7,15 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-export const useLoadDraftPost = (editor: Editor | null, postId: string) => {
+export const useLoadDraftPost = (
+  editor: Editor | null,
+  postId: string | null
+) => {
   const router = useRouter();
-  const draftPost = usePostStore(state => state.post);
-  const setDraftPost = usePostStore(state => state.setPost);
+  const addDraftPost = usePostStore(state => state.addDraftPost);
 
   useEffect(() => {
-    if (!editor) return;
+    if (!editor || !postId) return;
 
     const loadPost = async () => {
       const resp = await getPostById(postId);
@@ -26,26 +28,11 @@ export const useLoadDraftPost = (editor: Editor | null, postId: string) => {
         return;
       }
 
-      // guardar post en zustand
-      setDraftPost(resp.data);
-      
-      editor.commands.setContent(resp.data.content as Content);
+      const draftPost = addDraftPost(resp.data);
 
-      // si el postId coincide con el borrador, se carga el borrador
-      // const editorContent =
-      //   postId !== draftPost.id
-      //     ? (resp.data.content as Content)
-      //     : (draftPost.content as Content);
-
-      // // si el postId no pertenece al anterior borrador, el borrador pasa a ser
-      // // el nuevo postId
-      // if (postId !== draftPost.id) {
-      //   setDraftPost(resp.data);
-      // }
-
-      // editor.commands.setContent(editorContent);
+      editor.commands.setContent(draftPost.draft.content as Content);
     };
 
     loadPost();
-  }, [editor, router, postId, setDraftPost]);
+  }, [editor, router, postId, addDraftPost]);
 };

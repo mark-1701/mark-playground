@@ -5,16 +5,19 @@ import type { Editor } from '@tiptap/react';
 import { useEffect } from 'react';
 import { getTextEditorContent, getTextEditorTitle } from '../utils';
 
-export const useSyncEditorToDraft = (editor: Editor | null) => {
-  const UpdateDraftPost = usePostStore(state => state.updatePost);
+export const useSyncEditorToDraft = (
+  editor: Editor | null,
+  postId: string | null
+) => {
+  const updateDraftPost = usePostStore(state => state.updateDraftPost);
 
-  // cualquier cambio en el editor
-  // se guarda el content y title de zustand
+  // ? cualquier cambio que exista en el content,
+  // ? se guarda el content y el title en zustand
   useEffect(() => {
-    if (!editor) return;
+    if (!editor || !postId) return;
 
     const onUpdate = () => {
-      UpdateDraftPost({
+      updateDraftPost(postId, {
         content: getTextEditorContent(editor),
         title: getTextEditorTitle(editor.state.doc)
       });
@@ -25,5 +28,5 @@ export const useSyncEditorToDraft = (editor: Editor | null) => {
     return () => {
       editor.off('update', onUpdate);
     };
-  }, [editor, UpdateDraftPost]);
+  }, [editor, postId, updateDraftPost]);
 };
