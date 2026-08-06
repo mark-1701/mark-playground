@@ -34,15 +34,23 @@ const PostSummary = ({ editor, postId }: PostSummaryProps) => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
     reset
   } = useForm<Inputs>();
 
-  // ? cambiar el input title cuando ocurra un cambio en el state de title
+  // ? cargar estado inicial al formulario
   useEffect(() => {
     if (!draftPost) return;
-    setValue('title', draftPost.draft.title ?? '');
-  }, [draftPost, setValue]);
+    reset({
+      title: draftPost.draft.title ?? ''
+    });
+  }, [reset, draftPost]);
+
+  // ? sincronizar el input de title si ocurre algún cambio en el state de
+  // ? del borrador almacenado en zustand.
+  // useEffect(() => {
+  //   if (!draftPost) return;
+  //   setValue('title', draftPost.draft.title ?? '');
+  // }, [draftPost, setValue]);
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     if (!draftPost) return;
@@ -73,14 +81,15 @@ const PostSummary = ({ editor, postId }: PostSummaryProps) => {
               Título
             </label>
             <input
-              {...register('title', { required: true })}
+              value={draftPost?.draft.title ?? ''}
               disabled={true}
               className="mb-1 w-full rounded border border-gray-300 p-1
                 opacity-55"
+              {...register('title', { required: true })}
             />
             {errors.title && (
               <span className="ml-1 text-sm text-red-500">
-                El título es obligatorio
+                Inserta un título en el editor de texto
               </span>
             )}
           </div>

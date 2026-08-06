@@ -1,5 +1,4 @@
 import type { Editor } from '@tiptap/core';
-import { HandleInsertImage } from '../types';
 import { useToolbarState } from '../useToolbarState';
 import ToolBarGroup from './components/ToolbarGroup';
 import Headings from './tools/Headings';
