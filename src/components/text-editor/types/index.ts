@@ -27,20 +27,8 @@ export type ToolbarState = {
   isLink: boolean;
 };
 
-export type HandleInsertImage = (
-  editor: Editor,
-  file: File,
-  position?: number
-) => void;
-
 export type ToolProps = {
   editor: Editor;
   toolbarState: ToolbarState;
   iconSize: number;
 };
-
-export type InsertImage = (
-  editor: Editor,
-  file: File,
-  position?: number
-) => void;

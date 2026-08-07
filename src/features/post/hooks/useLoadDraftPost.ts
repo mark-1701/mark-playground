@@ -7,15 +7,12 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-export const useLoadDraftPost = (
-  editor: Editor | null,
-  postId: string | null
-) => {
+export const useLoadDraftPost = (editor: Editor | null, postId: string) => {
   const router = useRouter();
   const addDraftPost = usePostStore(state => state.addDraftPost);
 
   useEffect(() => {
-    if (!editor || !postId) return;
+    if (!editor) return;
 
     const loadPost = async () => {
       const resp = await getPostById(postId);

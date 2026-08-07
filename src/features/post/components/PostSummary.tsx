@@ -10,6 +10,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { getTextEditorContent, getTextEditorMediaKeys } from '../utils';
 
+// todo: bloquear el botón cuando se esta guardando el artículo
+
 type Inputs = {
   title: string;
 };
@@ -56,7 +58,7 @@ const PostSummary = ({ editor, postId }: PostSummaryProps) => {
     if (!draftPost) return;
 
     const resp = await savePost(
-      draftPost.draft.id,
+      postId,
       data.title,
       getTextEditorContent(editor),
       getTextEditorMediaKeys(editor)
@@ -122,6 +124,3 @@ const PostSummary = ({ editor, postId }: PostSummaryProps) => {
 };
 
 export default PostSummary;
-
-// todo: bloquear el botón cuando se esta haciendo la consulta
-// const [isSaving, setIsSaving] = useState(false);

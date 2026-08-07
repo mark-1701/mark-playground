@@ -1,14 +1,12 @@
-import { useInsertImage } from '@/features/post/hooks/useInsertImage';
-import type { Editor, Extensions } from '@tiptap/core';
+import type { InsertImage } from '@/types';
+import type { Extensions } from '@tiptap/core';
 import FileHandler from '@tiptap/extension-file-handler';
 import Highlight from '@tiptap/extension-highlight';
 import Image from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import StarterKit from '@tiptap/starter-kit';
 
-export const getExtensions = (): Extensions => {
-  const { insertImage } = useInsertImage();
-
+export const getExtensions = (insertImage: InsertImage): Extensions => {
   return [
     StarterKit,
     TextAlign.configure({
@@ -18,7 +16,13 @@ export const getExtensions = (): Extensions => {
     Highlight,
     CustomImage,
     FileHandler.configure({
-      allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
+      allowedMimeTypes: [
+        'image/png',
+        'image/jpg',
+        'image/jpeg',
+        'image/gif',
+        'image/webp'
+      ],
       onDrop: (currentEditor, files, pos) => {
         files.forEach(file => {
           insertImage(currentEditor, file, pos);

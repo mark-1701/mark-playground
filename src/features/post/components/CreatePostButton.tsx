@@ -9,6 +9,8 @@ import { replaceDraftPost } from '@/actions/post/replace-draft-post';
 import Dialog from '@/components/Dialog';
 import { initialPostData } from '../data/initialPostData';
 
+// todo: bloquear botón cuando se están haciendo las consultas
+
 const CreatePostButton = () => {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
@@ -33,7 +35,7 @@ const CreatePostButton = () => {
     createNewPost();
   };
 
-  // * hanlders de los botones footer del dialog
+  // * handlers de los botones footer del dialog
 
   const continueDraft = () => {
     if (!currentPostId) return;
@@ -125,6 +127,3 @@ const CreatePostButton = () => {
 };
 
 export default CreatePostButton;
-
-// todo: bloquear botón cuando se esta haciendo una consulta
-// const [isCreating, setIsCreating] = useState(false);

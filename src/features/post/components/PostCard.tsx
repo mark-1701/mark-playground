@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { GoTrash } from 'react-icons/go';
 import { toast } from 'react-toastify';
 
+// todo: bloquear el botón cuando se esta eliminando el post
+
 type PostCardProps = {
   id: string;
   title: string | null;

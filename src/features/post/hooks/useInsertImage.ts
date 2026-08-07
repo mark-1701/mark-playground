@@ -1,33 +1,26 @@
 'use client';
 
 import { registerMedia, updateMediaUrl } from '@/actions';
-import { usePostStore } from '@/stores/post-store';
-import { ActionResult } from '@/types';
 import { generateImageKey } from '@/utils';
 import type { Editor } from '@tiptap/core';
 import { useState } from 'react';
 import { uploadImageToStorage } from '@/services/storage/r2';
 
-// todo: implementar mécanismos de seguridad para evitar las múltiples socitudes
+// todo: implementar mécanismos de seguridad para evitar las múltiples solicitudes
 // todo: insertar una imagen temporal (spinner de carga)
 
-export const useInsertImage = () => {
-  const draftPostId = usePostStore(state => state.id);
+export const useInsertImage = (postId: string) => {
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
-  const insertImage = async (
-    editor: Editor,
-    file: File,
-    position?: number
-  ): Promise<ActionResult<null>> => {
+  const insertImage = async (editor: Editor, file: File, position?: number) => {
     const key = generateImageKey(file.name);
     const insertPos = position ?? editor.state.selection.anchor;
 
     setIsUploadingImage(true);
     try {
       // 1. registrar media
-      const media = await registerMedia(draftPostId, key);
+      const media = await registerMedia(postId, key);
       if (!media.ok) throw new Error('No se pudo registrar la imagen');
 
       // 2. guardar imagen el en storage
@@ -48,18 +41,8 @@ export const useInsertImage = () => {
         })
         .focus()
         .run();
-
-      return {
-        ok: true,
-        data: null
-      };
     } catch (error) {
       setUploadError('Error insertando imagen');
-
-      return {
-        ok: false,
-        message: 'Ocurrió algún error'
-      };
     } finally {
       setIsUploadingImage(false);
     }

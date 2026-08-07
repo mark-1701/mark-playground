@@ -1,11 +1,11 @@
-import { useInsertImage } from '@/features/post/hooks/useInsertImage';
+import { usePostEditor } from '@/features/post/context/PostEditorContext';
 import { useRef } from 'react';
 import { PiImage } from 'react-icons/pi';
 import { ToolProps } from '../../types';
 import ToolBarButton from '../components/ToolbarButton';
 
 const InsertImage = ({ editor, iconSize }: ToolProps) => {
-  const { insertImage } = useInsertImage();
+  const { insertImage } = usePostEditor();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   return (
